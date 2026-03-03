@@ -1,0 +1,2208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legal Care PME — Sécurisez votre entreprise</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #112240;
+    --gold: #c9a84c;
+    --gold-light: #e8c870;
+    --cream: #f8f4ec;
+    --cream-dark: #ede8dc;
+    --white: #ffffff;
+    --text: #2c3e50;
+    --text-light: #6b7a8d;
+    --success: #27ae60;
+    --warning: #e67e22;
+    --danger: #e74c3c;
+    --blue-accent: #2980b9;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ===== NAVBAR ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(10,22,40,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    transition: all 0.3s;
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 0.8rem;
+    text-decoration: none;
+  }
+
+  .nav-logo-icon {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+  }
+
+  .nav-logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; font-weight: 700;
+    color: var(--white);
+  }
+
+  .nav-logo-text span { color: var(--gold); }
+
+  .nav-links {
+    display: flex; gap: 2rem; list-style: none;
+  }
+
+  .nav-links a {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none; font-size: 0.9rem; font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+
+  .nav-cta {
+    display: flex; gap: 1rem; align-items: center;
+  }
+
+  .btn-outline-nav {
+    border: 1px solid var(--gold);
+    color: var(--gold); background: transparent;
+    padding: 0.5rem 1.2rem; border-radius: 6px;
+    font-size: 0.9rem; cursor: pointer; transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .btn-outline-nav:hover { background: var(--gold); color: var(--navy); }
+
+  .btn-primary-nav {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--navy); border: none;
+    padding: 0.5rem 1.4rem; border-radius: 6px;
+    font-size: 0.9rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .btn-primary-nav:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(201,168,76,0.4); }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    background: var(--navy);
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 8rem 4rem 4rem;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: 
+      radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(41,128,185,0.06) 0%, transparent 50%);
+  }
+
+  .hero-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: center;
+    max-width: 1200px; margin: 0 auto; width: 100%;
+    position: relative; z-index: 1;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold); padding: 0.4rem 1rem;
+    border-radius: 50px; font-size: 0.82rem; font-weight: 500;
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  .hero-badge::before { content: '⚖️'; font-size: 0.9rem; }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900; color: var(--white);
+    line-height: 1.1; margin-bottom: 1.5rem;
+    animation: fadeInUp 0.6s 0.1s ease both;
+  }
+
+  .hero h1 .accent { color: var(--gold); display: block; }
+
+  .hero-desc {
+    color: rgba(255,255,255,0.65); font-size: 1.1rem;
+    line-height: 1.7; margin-bottom: 2.5rem;
+    animation: fadeInUp 0.6s 0.2s ease both;
+  }
+
+  .hero-cta {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    animation: fadeInUp 0.6s 0.3s ease both;
+  }
+
+  .btn-hero-primary {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--navy); border: none;
+    padding: 0.9rem 2rem; border-radius: 8px;
+    font-size: 1rem; font-weight: 700; cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .btn-hero-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(201,168,76,0.4); }
+
+  .btn-hero-secondary {
+    background: transparent; color: var(--white);
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 0.9rem 2rem; border-radius: 8px;
+    font-size: 1rem; font-weight: 500; cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .btn-hero-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+  .hero-stats {
+    display: flex; gap: 2rem; margin-top: 3rem;
+    animation: fadeInUp 0.6s 0.4s ease both;
+  }
+
+  .hero-stat { text-align: center; }
+  .hero-stat .number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 900; color: var(--gold); display: block;
+  }
+  .hero-stat .label { color: rgba(255,255,255,0.5); font-size: 0.8rem; }
+
+  .hero-visual {
+    display: flex; flex-direction: column; gap: 1rem;
+    animation: fadeInUp 0.6s 0.2s ease both;
+  }
+
+  .hero-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px; padding: 1.5rem;
+    backdrop-filter: blur(10px);
+  }
+
+  .hero-card-header {
+    display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem;
+  }
+
+  .hero-card-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 1rem;
+  }
+
+  .hero-card-icon.gold { background: rgba(201,168,76,0.2); }
+  .hero-card-icon.blue { background: rgba(41,128,185,0.2); }
+  .hero-card-icon.green { background: rgba(39,174,96,0.2); }
+
+  .hero-card-title { color: var(--white); font-weight: 600; font-size: 0.95rem; }
+  .hero-card-sub { color: rgba(255,255,255,0.45); font-size: 0.8rem; }
+
+  .progress-bar {
+    background: rgba(255,255,255,0.1);
+    border-radius: 50px; height: 6px; overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%; border-radius: 50px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    animation: growBar 1.5s 0.8s ease both;
+  }
+
+  @keyframes growBar { from { width: 0; } to { width: var(--w); } }
+
+  .notification-pill {
+    display: flex; align-items: center; gap: 0.7rem;
+    background: rgba(39,174,96,0.15);
+    border: 1px solid rgba(39,174,96,0.3);
+    border-radius: 50px; padding: 0.5rem 1rem;
+    color: #5ddb8a; font-size: 0.82rem; font-weight: 500;
+  }
+
+  .notif-dot { width: 8px; height: 8px; border-radius: 50%; background: #5ddb8a; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  /* ===== SERVICES ===== */
+  .services {
+    padding: 6rem 4rem;
+    background: var(--cream);
+  }
+
+  .section-header {
+    text-align: center; max-width: 600px; margin: 0 auto 4rem;
+  }
+
+  .section-tag {
+    display: inline-block;
+    background: rgba(201,168,76,0.12);
+    color: var(--gold); border: 1px solid rgba(201,168,76,0.3);
+    padding: 0.3rem 0.9rem; border-radius: 50px;
+    font-size: 0.78rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.1em; margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 700; color: var(--navy); line-height: 1.2; margin-bottom: 1rem;
+  }
+
+  .section-desc { color: var(--text-light); font-size: 1rem; line-height: 1.7; }
+
+  .services-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem; max-width: 1200px; margin: 0 auto;
+  }
+
+  .service-card {
+    background: var(--white);
+    border-radius: 20px; padding: 2rem;
+    border: 1px solid var(--cream-dark);
+    transition: all 0.3s; cursor: pointer;
+    position: relative; overflow: hidden;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    transform: scaleX(0); transition: transform 0.3s;
+  }
+
+  .service-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+  .service-card:hover::before { transform: scaleX(1); }
+
+  .service-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; margin-bottom: 1.2rem;
+  }
+
+  .service-icon.gold { background: rgba(201,168,76,0.12); }
+  .service-icon.navy { background: rgba(10,22,40,0.08); }
+  .service-icon.blue { background: rgba(41,128,185,0.12); }
+  .service-icon.green { background: rgba(39,174,96,0.12); }
+
+  .service-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem; font-weight: 700;
+    color: var(--navy); margin-bottom: 0.6rem;
+  }
+
+  .service-card p { color: var(--text-light); font-size: 0.88rem; line-height: 1.6; }
+
+  /* ===== WHY ===== */
+  .why-section {
+    padding: 6rem 4rem;
+    background: var(--navy);
+    position: relative; overflow: hidden;
+  }
+
+  .why-section::before {
+    content: '';
+    position: absolute; top: -50%; right: -20%;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(201,168,76,0.06), transparent 70%);
+    border-radius: 50%;
+  }
+
+  .why-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center;
+    max-width: 1200px; margin: 0 auto;
+    position: relative; z-index: 1;
+  }
+
+  .why-section .section-title { color: var(--white); }
+  .why-section .section-desc { color: rgba(255,255,255,0.6); }
+  .why-section .section-tag { margin-bottom: 1rem; }
+
+  .why-points { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
+
+  .why-point {
+    display: flex; gap: 1rem; align-items: flex-start;
+  }
+
+  .why-point-icon {
+    width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+    background: rgba(201,168,76,0.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+  }
+
+  .why-point h4 { color: var(--white); font-weight: 600; margin-bottom: 0.3rem; font-size: 0.95rem; }
+  .why-point p { color: rgba(255,255,255,0.55); font-size: 0.85rem; line-height: 1.6; }
+
+  .impact-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .impact-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 1.5rem; text-align: center;
+  }
+
+  .impact-card .big-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem; font-weight: 900; color: var(--gold);
+    display: block; margin-bottom: 0.3rem;
+  }
+
+  .impact-card p { color: rgba(255,255,255,0.55); font-size: 0.82rem; }
+
+  /* ===== TESTIMONIALS ===== */
+  .testimonials {
+    padding: 6rem 4rem; background: var(--cream);
+  }
+
+  .testi-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; max-width: 1200px; margin: 0 auto;
+  }
+
+  .testi-card {
+    background: var(--white); border-radius: 20px; padding: 2rem;
+    border: 1px solid var(--cream-dark);
+    transition: all 0.3s;
+  }
+
+  .testi-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.07); }
+
+  .testi-stars { color: var(--gold); margin-bottom: 1rem; font-size: 0.9rem; letter-spacing: 2px; }
+
+  .testi-text {
+    color: var(--text); font-size: 0.92rem; line-height: 1.7;
+    margin-bottom: 1.5rem; font-style: italic;
+  }
+
+  .testi-author { display: flex; align-items: center; gap: 0.8rem; }
+
+  .testi-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; font-weight: 700; color: var(--white);
+    flex-shrink: 0;
+  }
+
+  .testi-author-name { font-weight: 600; font-size: 0.9rem; color: var(--navy); }
+  .testi-author-role { color: var(--text-light); font-size: 0.8rem; }
+
+  /* ===== DASHBOARD PREVIEW ===== */
+  .dashboard-section {
+    padding: 6rem 4rem; background: var(--navy-mid);
+  }
+
+  .dashboard-section .section-title { color: var(--white); }
+  .dashboard-section .section-desc { color: rgba(255,255,255,0.6); }
+
+  .dashboard-preview {
+    max-width: 1200px; margin: 3rem auto 0;
+    background: #0d1f35;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 24px; overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+  }
+
+  .dash-topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--navy); padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .dash-topbar-left { display: flex; align-items: center; gap: 1rem; }
+
+  .dash-logo-mini {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 700; color: var(--white);
+  }
+
+  .dash-logo-mini span { color: var(--gold); }
+
+  .dash-user { display: flex; align-items: center; gap: 0.6rem; }
+
+  .dash-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 700; color: var(--navy);
+  }
+
+  .dash-user-name { color: rgba(255,255,255,0.8); font-size: 0.85rem; }
+
+  .dash-body { display: flex; min-height: 400px; }
+
+  .dash-sidebar {
+    width: 200px; flex-shrink: 0;
+    background: rgba(255,255,255,0.02);
+    border-right: 1px solid rgba(255,255,255,0.05);
+    padding: 1.2rem 0;
+  }
+
+  .dash-nav-item {
+    display: flex; align-items: center; gap: 0.7rem;
+    padding: 0.7rem 1.2rem; color: rgba(255,255,255,0.5);
+    font-size: 0.82rem; cursor: pointer; transition: all 0.2s;
+  }
+
+  .dash-nav-item:hover, .dash-nav-item.active {
+    background: rgba(201,168,76,0.08);
+    color: var(--gold); border-right: 2px solid var(--gold);
+  }
+
+  .dash-content { flex: 1; padding: 1.5rem; }
+
+  .dash-greeting { color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-bottom: 0.3rem; }
+  .dash-title-main {
+    font-family: 'Playfair Display', serif;
+    color: var(--white); font-size: 1.4rem; font-weight: 700; margin-bottom: 1.5rem;
+  }
+
+  .dash-cards-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+
+  .dash-mini-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px; padding: 1rem;
+  }
+
+  .dash-mini-card .mini-label { color: rgba(255,255,255,0.45); font-size: 0.72rem; margin-bottom: 0.4rem; }
+  .dash-mini-card .mini-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 700; color: var(--gold);
+  }
+  .dash-mini-card .mini-change { font-size: 0.72rem; color: #5ddb8a; margin-top: 0.2rem; }
+
+  .dash-row2 { display: grid; grid-template-columns: 1.5fr 1fr; gap: 1rem; }
+
+  .dash-panel {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px; padding: 1rem;
+  }
+
+  .dash-panel-title { color: rgba(255,255,255,0.7); font-size: 0.8rem; font-weight: 600; margin-bottom: 0.8rem; }
+
+  .alert-item {
+    display: flex; align-items: center; gap: 0.7rem;
+    padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 0.78rem;
+  }
+
+  .alert-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .alert-dot.red { background: var(--danger); }
+  .alert-dot.orange { background: var(--warning); }
+  .alert-dot.green { background: var(--success); }
+
+  .alert-text { color: rgba(255,255,255,0.65); }
+
+  .module-list { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .module-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.5rem 0.7rem;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px; cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .module-item:hover { background: rgba(201,168,76,0.06); }
+
+  .module-item-left { display: flex; align-items: center; gap: 0.6rem; font-size: 0.78rem; color: rgba(255,255,255,0.7); }
+  .module-item-badge {
+    font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 50px; font-weight: 600;
+  }
+  .badge-gold { background: rgba(201,168,76,0.2); color: var(--gold); }
+  .badge-green { background: rgba(39,174,96,0.2); color: #5ddb8a; }
+  .badge-blue { background: rgba(41,128,185,0.2); color: #5ba8d6; }
+
+  /* ===== MODULES GRID ===== */
+  .modules-section { padding: 6rem 4rem; background: var(--cream); }
+
+  .modules-big-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; max-width: 1200px; margin: 0 auto;
+  }
+
+  .module-card {
+    background: var(--white); border-radius: 20px; padding: 2rem;
+    border: 1px solid var(--cream-dark);
+    transition: all 0.3s; cursor: pointer; position: relative;
+  }
+
+  .module-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+
+  .module-card.featured {
+    background: var(--navy);
+    border-color: transparent;
+    grid-column: span 2;
+  }
+
+  .module-card-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem; font-weight: 900;
+    color: rgba(201,168,76,0.15); line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .module-card.featured .module-card-num { color: rgba(201,168,76,0.2); }
+
+  .module-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; font-weight: 700; color: var(--navy); margin-bottom: 0.6rem;
+  }
+
+  .module-card.featured h3 { color: var(--white); }
+
+  .module-card > p { color: var(--text-light); font-size: 0.88rem; line-height: 1.6; }
+  .module-card.featured > p { color: rgba(255,255,255,0.55); }
+
+  .module-features { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
+
+  .module-feature {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.82rem; color: var(--text-light);
+  }
+
+  .module-card.featured .module-feature { color: rgba(255,255,255,0.6); }
+
+  .module-feature::before {
+    content: '✓'; width: 18px; height: 18px; border-radius: 50%;
+    background: rgba(39,174,96,0.15); color: #5ddb8a;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; font-weight: 700; flex-shrink: 0;
+  }
+
+  .module-cta-btn {
+    margin-top: 1.5rem;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--navy); border: none;
+    padding: 0.7rem 1.5rem; border-radius: 8px;
+    font-size: 0.88rem; font-weight: 700; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .module-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,168,76,0.35); }
+
+  /* ===== PRICING ===== */
+  .pricing-section { padding: 6rem 4rem; background: var(--navy); }
+
+  .pricing-section .section-title { color: var(--white); }
+  .pricing-section .section-desc { color: rgba(255,255,255,0.6); }
+
+  .pricing-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; max-width: 900px; margin: 3rem auto 0;
+  }
+
+  .pricing-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 24px; padding: 2rem; text-align: center;
+    transition: all 0.3s;
+  }
+
+  .pricing-card.popular {
+    background: rgba(201,168,76,0.08);
+    border-color: var(--gold); position: relative;
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(201,168,76,0.15);
+  }
+
+  .popular-badge {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--navy); font-size: 0.75rem; font-weight: 700;
+    padding: 0.25rem 0.8rem; border-radius: 50px; white-space: nowrap;
+  }
+
+  .pricing-name { color: rgba(255,255,255,0.7); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+  .pricing-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem; font-weight: 900; color: var(--gold); margin-bottom: 0.3rem;
+  }
+  .pricing-price small { font-size: 1rem; font-family: 'DM Sans', sans-serif; font-weight: 400; color: rgba(255,255,255,0.4); }
+  .pricing-period { color: rgba(255,255,255,0.4); font-size: 0.8rem; margin-bottom: 1.5rem; }
+
+  .pricing-features { list-style: none; margin-bottom: 2rem; text-align: left; }
+  .pricing-features li {
+    padding: 0.4rem 0; font-size: 0.85rem; color: rgba(255,255,255,0.6);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex; gap: 0.5rem; align-items: center;
+  }
+  .pricing-features li::before { content: '✓'; color: var(--gold); font-size: 0.75rem; font-weight: 700; }
+
+  .pricing-btn {
+    width: 100%; padding: 0.8rem; border-radius: 10px;
+    font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .pricing-btn.outline {
+    background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.7);
+  }
+
+  .pricing-btn.outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  .pricing-btn.filled {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border: none; color: var(--navy);
+  }
+
+  .pricing-btn.filled:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,168,76,0.35); }
+
+  /* ===== CTA BAND ===== */
+  .cta-band {
+    padding: 5rem 4rem;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    text-align: center;
+  }
+
+  .cta-band h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900; color: var(--navy); margin-bottom: 1rem;
+  }
+
+  .cta-band p { color: rgba(10,22,40,0.7); font-size: 1.05rem; margin-bottom: 2rem; }
+
+  .cta-band .btn-navy {
+    background: var(--navy); color: var(--white);
+    border: none; padding: 1rem 2.5rem; border-radius: 10px;
+    font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    margin: 0 0.5rem;
+  }
+
+  .cta-band .btn-navy:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(10,22,40,0.3); }
+
+  .cta-band .btn-outline-white {
+    background: transparent; color: var(--navy);
+    border: 2px solid var(--navy); padding: 1rem 2.5rem; border-radius: 10px;
+    font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    margin: 0 0.5rem;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--navy);
+    padding: 4rem 4rem 2rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem; max-width: 1200px; margin: 0 auto 3rem;
+  }
+
+  .footer-brand p { color: rgba(255,255,255,0.45); font-size: 0.88rem; line-height: 1.7; margin-top: 1rem; }
+
+  .footer-col h4 { color: var(--gold); font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 0.5rem; }
+  .footer-col ul li a { color: rgba(255,255,255,0.45); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+  .footer-col ul li a:hover { color: var(--gold); }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 1.5rem; max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  .footer-bottom p { color: rgba(255,255,255,0.3); font-size: 0.82rem; }
+
+  /* ===== MODAL (Auth) ===== */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 2000;
+    background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+    display: none; align-items: center; justify-content: center;
+  }
+
+  .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+
+  .modal {
+    background: var(--navy-mid);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 24px; padding: 3rem;
+    width: 100%; max-width: 440px;
+    position: relative;
+    animation: slideUp 0.3s ease;
+  }
+
+  .modal-close {
+    position: absolute; top: 1rem; right: 1rem;
+    background: rgba(255,255,255,0.08); border: none;
+    color: rgba(255,255,255,0.6); width: 32px; height: 32px;
+    border-radius: 8px; cursor: pointer; font-size: 1rem; transition: all 0.2s;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.15); color: white; }
+
+  .modal h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; font-weight: 900; color: var(--white); margin-bottom: 0.4rem;
+  }
+
+  .modal-sub { color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-bottom: 2rem; }
+
+  .modal-tabs {
+    display: flex; margin-bottom: 1.5rem;
+    background: rgba(255,255,255,0.05); border-radius: 10px; padding: 0.3rem;
+  }
+
+  .modal-tab {
+    flex: 1; padding: 0.5rem; text-align: center;
+    color: rgba(255,255,255,0.5); font-size: 0.88rem; font-weight: 500;
+    cursor: pointer; border-radius: 8px; transition: all 0.2s;
+    border: none; background: transparent; font-family: 'DM Sans', sans-serif;
+  }
+
+  .modal-tab.active { background: var(--gold); color: var(--navy); font-weight: 700; }
+
+  .form-group { margin-bottom: 1rem; }
+
+  .form-label { display: block; color: rgba(255,255,255,0.7); font-size: 0.82rem; font-weight: 500; margin-bottom: 0.4rem; }
+
+  .form-input {
+    width: 100%; padding: 0.75rem 1rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px; color: var(--white); font-size: 0.9rem;
+    transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+  }
+
+  .form-input:focus { outline: none; border-color: var(--gold); background: rgba(255,255,255,0.08); }
+  .form-input::placeholder { color: rgba(255,255,255,0.25); }
+
+  .btn-submit {
+    width: 100%; padding: 0.9rem;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--navy); border: none; border-radius: 10px;
+    font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 1rem;
+    font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+  }
+
+  .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,168,76,0.4); }
+
+  /* ===== FILTER BUTTONS ===== */
+  .filter-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.5); padding: 0.35rem 0.9rem;
+    border-radius: 50px; font-size: 0.78rem; cursor: pointer;
+    transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+  }
+  .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .filter-btn.active { background: rgba(201,168,76,0.15); border-color: var(--gold); color: var(--gold); font-weight: 600; }
+
+  /* ===== CONTRACT TABLE ===== */
+  .contract-row {
+    display: grid; grid-template-columns: 2fr 2fr 1.5fr 1fr 0.8fr;
+    gap: 0.5rem; padding: 0.7rem 0.8rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    align-items: center; transition: background 0.2s; border-radius: 8px;
+  }
+  .contract-row:hover { background: rgba(255,255,255,0.03); }
+  .contract-row-header {
+    color: rgba(255,255,255,0.35); font-size: 0.72rem;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .contract-row-data { color: rgba(255,255,255,0.75); font-size: 0.82rem; }
+  .contract-type-badge {
+    font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 50px;
+    font-weight: 600; display: inline-block;
+  }
+
+  /* ===== CONTRACT GENERATOR ===== */
+  .contract-type-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 1rem;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; flex-direction: column; gap: 0.3rem;
+  }
+  .contract-type-card:hover { background: rgba(201,168,76,0.08); border-color: rgba(201,168,76,0.3); }
+  .contract-type-card.selected { background: rgba(201,168,76,0.12); border-color: var(--gold); }
+  .ct-name { color: #fff; font-weight: 600; font-size: 0.88rem; }
+  .ct-desc { color: rgba(255,255,255,0.4); font-size: 0.75rem; }
+
+  .step-dot {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.4); font-size: 0.78rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    transition: all 0.3s;
+  }
+  .step-dot.active { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+  .step-dot.done { background: var(--success); border-color: var(--success); color: #fff; }
+  .step-line {
+    flex: 1; height: 2px; background: rgba(255,255,255,0.08); transition: all 0.3s;
+  }
+  .step-line.active { background: var(--gold); }
+
+  #contractModal .modal { max-height: 90vh; overflow-y: auto; }
+
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes fadeInUp { from { transform: translateY(25px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+    .modules-big-grid { grid-template-columns: repeat(2, 1fr); }
+    .module-card.featured { grid-column: span 1; }
+    .pricing-grid { grid-template-columns: 1fr; max-width: 380px; }
+    .pricing-card.popular { transform: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { padding: 7rem 1.5rem 3rem; }
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+    .services, .why-section, .testimonials, .dashboard-section, .modules-section, .pricing-section, .cta-band { padding: 4rem 1.5rem; }
+    .why-grid { grid-template-columns: 1fr; }
+    .testi-grid { grid-template-columns: 1fr; }
+    .dash-sidebar { display: none; }
+    .dash-cards-row { grid-template-columns: repeat(2, 1fr); }
+    .dash-row2 { grid-template-columns: 1fr; }
+    .modules-big-grid { grid-template-columns: 1fr; }
+    footer { padding: 3rem 1.5rem 1.5rem; }
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">⚖️</div>
+    <span class="nav-logo-text">Legal Care <span>PME</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#modules">Modules</a></li>
+    <li><a href="#dashboard">Dashboard</a></li>
+    <li><a href="#pricing">Tarifs</a></li>
+  </ul>
+  <div class="nav-cta">
+    <button class="btn-outline-nav" onclick="openModal('login')">Connexion</button>
+    <button class="btn-primary-nav" onclick="openModal('register')">Créer un compte</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-badge">Plateforme juridique pour PME</div>
+      <h1>Sécurisez votre PME,<br><span class="accent">simplifiez le droit.</span></h1>
+      <p class="hero-desc">Legal Care PME vous accompagne à chaque étape : contrats, conformité, médiation et formation juridique. Protégez votre activité sans complexité.</p>
+      <div class="hero-cta">
+        <button class="btn-hero-primary" onclick="openModal('register')">✦ S'inscrire gratuitement</button>
+        <button class="btn-hero-secondary" onclick="scrollTo('#services')">Découvrir les services →</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><span class="number">2 500+</span><span class="label">PME accompagnées</span></div>
+        <div class="hero-stat"><span class="number">98%</span><span class="label">de satisfaction</span></div>
+        <div class="hero-stat"><span class="number">10K+</span><span class="label">Contrats générés</span></div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="notification-pill">
+        <div class="notif-dot"></div>
+        🎉 Votre audit juridique est terminé — 3 recommandations prioritaires
+      </div>
+
+      <div class="hero-card">
+        <div class="hero-card-header">
+          <div class="hero-card-icon gold">📄</div>
+          <div>
+            <div class="hero-card-title">Contrat de prestation</div>
+            <div class="hero-card-sub">Généré automatiquement · Prêt à signer</div>
+          </div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="--w: 85%"></div></div>
+      </div>
+
+      <div class="hero-card">
+        <div class="hero-card-header">
+          <div class="hero-card-icon blue">🛡️</div>
+          <div>
+            <div class="hero-card-title">Audit de conformité</div>
+            <div class="hero-card-sub">Fiscalité, Social, Statuts — Score global</div>
+          </div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="--w: 72%"></div></div>
+      </div>
+
+      <div class="hero-card">
+        <div class="hero-card-header">
+          <div class="hero-card-icon green">🎓</div>
+          <div>
+            <div class="hero-card-title">Formation en cours</div>
+            <div class="hero-card-sub">Droit du travail pour PME · Module 3/6</div>
+          </div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="--w: 50%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-header">
+    <span class="section-tag">Nos services</span>
+    <h2 class="section-title">Tout ce dont votre PME a besoin, en un seul endroit</h2>
+    <p class="section-desc">De la génération de contrats à la médiation en passant par la formation juridique — nous couvrons l'ensemble de vos besoins légaux.</p>
+  </div>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon gold">📋</div>
+      <h3>Audit Juridique</h3>
+      <p>Évaluation complète de votre conformité légale avec checklist guidée et recommandations prioritaires.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon navy">📝</div>
+      <h3>Packs de Contrats</h3>
+      <p>Générateur de contrats intelligents : vente, prestation, bail, emploi. PDF prêt à signer en 5 minutes.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon blue">🤝</div>
+      <h3>Médiation & Litiges</h3>
+      <p>Résolution amiable des conflits avec associés, clients, fournisseurs ou propriétaires. Suivi en temps réel.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon green">🎓</div>
+      <h3>Formation e-learning</h3>
+      <p>Cours vidéo courts, quiz, webinaires et certification "PME Légalement Conforme".</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY SECTION -->
+<section class="why-section">
+  <div class="why-grid">
+    <div>
+      <span class="section-tag">Pourquoi Legal Care PME ?</span>
+      <h2 class="section-title">L'impact social et business que vous méritez</h2>
+      <p class="section-desc">Des milliers de PME africaines opèrent sans protection juridique adéquate. Nous changeons cela.</p>
+
+      <div class="why-points">
+        <div class="why-point">
+          <div class="why-point-icon">💡</div>
+          <div>
+            <h4>Accessible et simple</h4>
+            <p>Interface intuitive conçue pour les entrepreneurs, pas pour les juristes. Aucune expertise requise.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-point-icon">🔒</div>
+          <div>
+            <h4>Sécurité maximale</h4>
+            <p>Vos documents stockés sur serveur chiffré. Confidentialité garantie à chaque interaction.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-point-icon">⚡</div>
+          <div>
+            <h4>Alertes proactives</h4>
+            <p>Email, WhatsApp, SMS : ne ratez plus une échéance fiscale ou un renouvellement de contrat.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-point-icon">🌍</div>
+          <div>
+            <h4>Impact social fort</h4>
+            <p>Formalisez votre PME, protégez vos emplois et contribuez au développement économique.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="impact-cards">
+      <div class="impact-card"><span class="big-num">73%</span><p>des PME font face à des litiges contractuels évitables</p></div>
+      <div class="impact-card"><span class="big-num">5min</span><p>pour générer un contrat légalement valide</p></div>
+      <div class="impact-card"><span class="big-num">60%</span><p>d'économies sur les frais juridiques annuels</p></div>
+      <div class="impact-card"><span class="big-num">24/7</span><p>accès à vos documents et alertes</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD RÉEL -->
+<section class="dashboard-section" id="dashboard">
+  <div class="section-header">
+    <span class="section-tag">Espace PME</span>
+    <h2 class="section-title" style="color:var(--white);">Votre cockpit juridique centralisé</h2>
+    <p class="section-desc" style="color:rgba(255,255,255,0.6);">Connectez-vous pour accéder à votre dashboard personnalisé.</p>
+  </div>
+
+  <!-- VUE NON CONNECTÉ -->
+  <div id="dashNotLoggedIn" style="max-width:500px;margin:0 auto;text-align:center;padding:3rem 2rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:24px;">
+    <div style="font-size:3rem;margin-bottom:1rem;">🔐</div>
+    <h3 style="color:#fff;font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:0.8rem;">Accédez à votre Dashboard</h3>
+    <p style="color:rgba(255,255,255,0.5);font-size:0.9rem;margin-bottom:1.5rem;">Connectez-vous pour voir vos contrats, statistiques et alertes en temps réel.</p>
+    <button class="btn-hero-primary" onclick="openModal('login')">Se connecter →</button>
+  </div>
+
+  <!-- VUE CONNECTÉ -->
+  <div id="dashLoggedIn" style="display:none;">
+    <div class="dashboard-preview" style="max-width:1200px;margin:0 auto;">
+      <!-- TOPBAR -->
+      <div class="dash-topbar">
+        <div class="dash-topbar-left">
+          <span class="dash-logo-mini">Legal Care <span>PME</span></span>
+        </div>
+        <div class="dash-user">
+          <div class="dash-avatar" id="realDashAvatar">--</div>
+          <span class="dash-user-name" id="realDashName">Chargement...</span>
+          <button onclick="signOut()" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);padding:0.3rem 0.8rem;border-radius:6px;cursor:pointer;font-size:0.78rem;font-family:'DM Sans',sans-serif;margin-left:0.5rem;">Déconnexion</button>
+        </div>
+      </div>
+
+      <!-- BODY -->
+      <div class="dash-body">
+        <!-- SIDEBAR -->
+        <div class="dash-sidebar">
+          <div class="dash-nav-item active" onclick="showDashTab('overview', this)">🏠 Accueil</div>
+          <div class="dash-nav-item" onclick="showDashTab('contracts', this)">📁 Mes contrats</div>
+          <div class="dash-nav-item" onclick="showDashTab('alerts', this)">🔔 Alertes</div>
+          <div class="dash-nav-item" onclick="openContractGenerator()">➕ Nouveau contrat</div>
+          <div class="dash-nav-item" onclick="signOut()">🚪 Déconnexion</div>
+        </div>
+
+        <!-- CONTENU PRINCIPAL -->
+        <div class="dash-content" style="min-height:480px;">
+
+          <!-- TAB : OVERVIEW -->
+          <div id="tabOverview">
+            <p class="dash-greeting" id="dashGreeting">Bonjour !</p>
+            <h2 class="dash-title-main">Vue d'ensemble de votre PME</h2>
+
+            <div class="dash-cards-row">
+              <div class="dash-mini-card">
+                <p class="mini-label">Total contrats</p>
+                <p class="mini-val" id="statTotal">—</p>
+                <p class="mini-change" id="statTotalSub">Chargement...</p>
+              </div>
+              <div class="dash-mini-card">
+                <p class="mini-label">Ce mois-ci</p>
+                <p class="mini-val" id="statMonth">—</p>
+                <p class="mini-change">Nouveaux contrats</p>
+              </div>
+              <div class="dash-mini-card">
+                <p class="mini-label">Type le + fréquent</p>
+                <p class="mini-val" style="font-size:1rem;" id="statTopType">—</p>
+                <p class="mini-change">Contrat favori</p>
+              </div>
+              <div class="dash-mini-card">
+                <p class="mini-label">Dernier contrat</p>
+                <p class="mini-val" style="font-size:0.85rem;" id="statLastDate">—</p>
+                <p class="mini-change">Date création</p>
+              </div>
+            </div>
+
+            <div class="dash-row2" style="margin-top:1rem;">
+              <div class="dash-panel">
+                <p class="dash-panel-title">📄 Derniers contrats générés</p>
+                <div id="recentContractsList">
+                  <div style="color:rgba(255,255,255,0.3);font-size:0.82rem;text-align:center;padding:1rem;">Chargement...</div>
+                </div>
+              </div>
+              <div class="dash-panel">
+                <p class="dash-panel-title">⚡ Actions rapides</p>
+                <div class="module-list">
+                  <div class="module-item" onclick="openContractGenerator()"><span class="module-item-left">📄 Générer un contrat</span><span class="module-item-badge badge-gold">Nouveau</span></div>
+                  <div class="module-item" onclick="showDashTab('contracts', null)"><span class="module-item-left">📁 Voir mes contrats</span><span class="module-item-badge badge-blue">Liste</span></div>
+                  <div class="module-item" onclick="showDashTab('alerts', null)"><span class="module-item-left">🔔 Mes alertes</span><span class="module-item-badge badge-green">Actif</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB : CONTRACTS -->
+          <div id="tabContracts" style="display:none;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;">
+              <h2 class="dash-title-main" style="margin:0;">📁 Mes Contrats</h2>
+              <button onclick="openContractGenerator()" style="background:linear-gradient(135deg,#c9a84c,#e8c870);color:#0a1628;border:none;padding:0.5rem 1.2rem;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.85rem;font-family:'DM Sans',sans-serif;">+ Nouveau</button>
+            </div>
+
+            <!-- FILTRE -->
+            <div style="display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;">
+              <button class="filter-btn active" onclick="filterContracts('all', this)">Tous</button>
+              <button class="filter-btn" onclick="filterContracts('prestation', this)">Prestation</button>
+              <button class="filter-btn" onclick="filterContracts('vente', this)">Vente</button>
+              <button class="filter-btn" onclick="filterContracts('bail', this)">Bail</button>
+              <button class="filter-btn" onclick="filterContracts('travail', this)">Travail</button>
+            </div>
+
+            <div id="contractsTableContainer">
+              <div style="color:rgba(255,255,255,0.3);font-size:0.82rem;text-align:center;padding:2rem;">Chargement de vos contrats...</div>
+            </div>
+          </div>
+
+          <!-- TAB : ALERTS -->
+          <div id="tabAlerts" style="display:none;">
+            <h2 class="dash-title-main">🔔 Alertes & Échéances</h2>
+            <div style="display:flex;flex-direction:column;gap:0.8rem;">
+              <div style="background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);border-radius:12px;padding:1rem;display:flex;align-items:center;gap:1rem;">
+                <span style="font-size:1.5rem;">🚨</span>
+                <div><p style="color:#ff6b6b;font-weight:600;font-size:0.9rem;">Déclaration TVA</p><p style="color:rgba(255,255,255,0.5);font-size:0.8rem;">Échéance dans 3 jours — Action requise</p></div>
+              </div>
+              <div style="background:rgba(230,126,34,0.1);border:1px solid rgba(230,126,34,0.3);border-radius:12px;padding:1rem;display:flex;align-items:center;gap:1rem;">
+                <span style="font-size:1.5rem;">⚠️</span>
+                <div><p style="color:#f39c12;font-weight:600;font-size:0.9rem;">Renouvellement bail commercial</p><p style="color:rgba(255,255,255,0.5);font-size:0.8rem;">Échéance dans 15 jours</p></div>
+              </div>
+              <div style="background:rgba(39,174,96,0.1);border:1px solid rgba(39,174,96,0.3);border-radius:12px;padding:1rem;display:flex;align-items:center;gap:1rem;">
+                <span style="font-size:1.5rem;">✅</span>
+                <div><p style="color:#5ddb8a;font-weight:600;font-size:0.9rem;">Cotisations sociales</p><p style="color:rgba(255,255,255,0.5);font-size:0.8rem;">Payées — Prochain rappel fin du mois</p></div>
+              </div>
+              <div style="background:rgba(41,128,185,0.1);border:1px solid rgba(41,128,185,0.3);border-radius:12px;padding:1rem;display:flex;align-items:center;gap:1rem;">
+                <span style="font-size:1.5rem;">📋</span>
+                <div><p style="color:#5ba8d6;font-weight:600;font-size:0.9rem;">Nouveau modèle disponible</p><p style="color:rgba(255,255,255,0.5);font-size:0.8rem;">Contrat de franchise — Télécharger maintenant</p></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULES -->
+<section class="modules-section" id="modules">
+  <div class="section-header">
+    <span class="section-tag">Modules</span>
+    <h2 class="section-title">Six modules pour une PME blindée</h2>
+    <p class="section-desc">Chaque module est conçu pour un besoin spécifique, intégré dans un écosystème cohérent.</p>
+  </div>
+
+  <div class="modules-big-grid">
+    <div class="module-card featured">
+      <div class="module-card-num">01</div>
+      <h3>📝 Générateur de Contrats</h3>
+      <p>Choisissez le type de contrat, remplissez un formulaire simple et téléchargez votre PDF prêt à signer en quelques minutes.</p>
+      <div class="module-features">
+        <div class="module-feature">Contrats de vente, prestation, bail, emploi, partenariat</div>
+        <div class="module-feature">Formulaire guidé pas-à-pas personnalisé</div>
+        <div class="module-feature">Génération PDF automatique et stockage sécurisé</div>
+        <div class="module-feature">Validation optionnelle par un expert juridique</div>
+      </div>
+      <button class="module-cta-btn" onclick="openContractGenerator()">Générer un contrat →</button>
+    </div>
+
+    <div class="module-card">
+      <div class="module-card-num">02</div>
+      <h3>🛡️ Audit & Conformité</h3>
+      <p>Checklist complète : fiscalité, social, statuts, contrats. Résultat automatique avec recommandations prioritaires.</p>
+      <div class="module-features">
+        <div class="module-feature">Checklist légale complète pour PME</div>
+        <div class="module-feature">Audit guidé étape par étape</div>
+        <div class="module-feature">Score et recommandations personnalisées</div>
+      </div>
+      <button class="module-cta-btn">Lancer l'audit →</button>
+    </div>
+
+    <div class="module-card">
+      <div class="module-card-num">03</div>
+      <h3>⚖️ Médiation & Litiges</h3>
+      <p>Soumettez vos conflits (associés, clients, fournisseurs) et suivez la médiation jusqu'à sa résolution.</p>
+      <div class="module-features">
+        <div class="module-feature">Formulaire de soumission de litige</div>
+        <div class="module-feature">Plan de médiation automatique</div>
+        <div class="module-feature">Suivi en temps réel des étapes</div>
+      </div>
+      <button class="module-cta-btn">Soumettre un litige →</button>
+    </div>
+
+    <div class="module-card">
+      <div class="module-card-num">04</div>
+      <h3>🎓 Formation e-learning</h3>
+      <p>Vidéos courtes, quiz, certificats et webinaires pour former votre équipe aux bases du droit des affaires.</p>
+      <div class="module-features">
+        <div class="module-feature">Cours vidéo de 5-10 minutes</div>
+        <div class="module-feature">Certification "PME Conforme"</div>
+        <div class="module-feature">Webinaires interactifs en direct</div>
+      </div>
+      <button class="module-cta-btn">Commencer →</button>
+    </div>
+
+    <div class="module-card">
+      <div class="module-card-num">05</div>
+      <h3>🔔 Alertes & Notifications</h3>
+      <p>Rappels automatiques par Email, WhatsApp ou SMS pour ne jamais rater une échéance fiscale ou contractuelle.</p>
+      <div class="module-features">
+        <div class="module-feature">Rappels fiscaux et sociaux</div>
+        <div class="module-feature">Alertes de renouvellement contrats</div>
+        <div class="module-feature">Notifications multi-canaux</div>
+      </div>
+      <button class="module-cta-btn">Configurer →</button>
+    </div>
+
+    <div class="module-card">
+      <div class="module-card-num">06</div>
+      <h3>💬 Réseau & Support</h3>
+      <p>Forum PME, FAQ juridique simplifiée et contact direct avec nos experts par chat ou formulaire.</p>
+      <div class="module-features">
+        <div class="module-feature">Forum d'échange entre PME</div>
+        <div class="module-feature">FAQ juridique mise à jour</div>
+        <div class="module-feature">Chat avec un expert en direct</div>
+      </div>
+      <button class="module-cta-btn">Rejoindre →</button>
+    </div>
+  </div>
+</section>
+
+<!-- CONTRACT GENERATOR MODAL -->
+<div class="modal-overlay" id="contractModal">
+  <div class="modal" style="max-width:620px;width:95%;">
+    <button class="modal-close" onclick="closeContractModal()">✕</button>
+
+    <!-- STEP INDICATOR -->
+    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.5rem;" id="stepIndicator">
+      <div class="step-dot active" id="dot1">1</div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-dot" id="dot2">2</div>
+      <div class="step-line" id="line2"></div>
+      <div class="step-dot" id="dot3">3</div>
+    </div>
+
+    <!-- STEP 1: Choisir le type -->
+    <div id="contractStep1">
+      <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.6rem;margin-bottom:0.4rem;">📝 Générateur de Contrats</h2>
+      <p style="color:rgba(255,255,255,0.5);font-size:0.9rem;margin-bottom:1.5rem;">Étape 1 — Choisissez le type de contrat</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
+        <div class="contract-type-card" onclick="selectContractType('prestation', this)">
+          <span style="font-size:1.5rem;">🛠️</span>
+          <span class="ct-name">Prestation de services</span>
+          <span class="ct-desc">Missions, consulting, freelance</span>
+        </div>
+        <div class="contract-type-card" onclick="selectContractType('vente', this)">
+          <span style="font-size:1.5rem;">🛒</span>
+          <span class="ct-name">Contrat de vente</span>
+          <span class="ct-desc">Vente de biens ou produits</span>
+        </div>
+        <div class="contract-type-card" onclick="selectContractType('bail', this)">
+          <span style="font-size:1.5rem;">🏢</span>
+          <span class="ct-name">Bail commercial</span>
+          <span class="ct-desc">Location de local professionnel</span>
+        </div>
+        <div class="contract-type-card" onclick="selectContractType('partenariat', this)">
+          <span style="font-size:1.5rem;">🤝</span>
+          <span class="ct-name">Partenariat</span>
+          <span class="ct-desc">Collaboration inter-entreprises</span>
+        </div>
+        <div class="contract-type-card" onclick="selectContractType('travail', this)">
+          <span style="font-size:1.5rem;">👤</span>
+          <span class="ct-name">Contrat de travail</span>
+          <span class="ct-desc">CDI, CDD, temps partiel</span>
+        </div>
+        <div class="contract-type-card" onclick="selectContractType('confidentialite', this)">
+          <span style="font-size:1.5rem;">🔒</span>
+          <span class="ct-name">Confidentialité (NDA)</span>
+          <span class="ct-desc">Protection des informations</span>
+        </div>
+      </div>
+      <button class="btn-submit" onclick="goStep2()" style="margin-top:1.2rem;" id="btnStep2" disabled>Suivant →</button>
+    </div>
+
+    <!-- STEP 2: Remplir le formulaire -->
+    <div id="contractStep2" style="display:none;">
+      <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.6rem;margin-bottom:0.4rem;">📋 Informations du contrat</h2>
+      <p style="color:rgba(255,255,255,0.5);font-size:0.9rem;margin-bottom:1.5rem;">Étape 2 — Remplissez les détails</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
+        <div class="form-group">
+          <label class="form-label">Nom de votre entreprise *</label>
+          <input type="text" class="form-input" id="cf_company_a" placeholder="Ex: SARL Diallo & Fils">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nom du cocontractant *</label>
+          <input type="text" class="form-input" id="cf_company_b" placeholder="Ex: Koné Industries">
+        </div>
+        <div class="form-group" style="grid-column:span 2;">
+          <label class="form-label">Objet du contrat *</label>
+          <input type="text" class="form-input" id="cf_objet" placeholder="Ex: Développement d'une application mobile">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Montant (FCFA) *</label>
+          <input type="number" class="form-input" id="cf_montant" placeholder="Ex: 500000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Durée du contrat</label>
+          <input type="text" class="form-input" id="cf_duree" placeholder="Ex: 3 mois">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date de début</label>
+          <input type="date" class="form-input" id="cf_date_debut">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ville / Pays</label>
+          <input type="text" class="form-input" id="cf_ville" placeholder="Ex: Ouagadougou, Burkina Faso">
+        </div>
+        <div class="form-group" style="grid-column:span 2;">
+          <label class="form-label">Clauses particulières (optionnel)</label>
+          <textarea class="form-input" id="cf_clauses" rows="3" placeholder="Ex: Paiement en 2 tranches, livraison en 30 jours..." style="resize:vertical;"></textarea>
+        </div>
+      </div>
+      <div style="display:flex;gap:0.8rem;margin-top:1rem;">
+        <button class="btn-submit" onclick="goStep1()" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);flex:1;">← Retour</button>
+        <button class="btn-submit" onclick="goStep3()" style="flex:2;">Générer le contrat →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Aperçu + Téléchargement -->
+    <div id="contractStep3" style="display:none;">
+      <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.6rem;margin-bottom:0.4rem;">✅ Contrat généré !</h2>
+      <p style="color:rgba(255,255,255,0.5);font-size:0.9rem;margin-bottom:1.5rem;">Étape 3 — Téléchargez votre contrat PDF</p>
+
+      <div style="background:rgba(39,174,96,0.1);border:1px solid rgba(39,174,96,0.3);border-radius:12px;padding:1.2rem;margin-bottom:1.2rem;display:flex;align-items:center;gap:1rem;">
+        <span style="font-size:2rem;">📄</span>
+        <div>
+          <p style="color:#5ddb8a;font-weight:600;font-size:0.95rem;" id="contractFileName">Contrat_Prestation.pdf</p>
+          <p style="color:rgba(255,255,255,0.45);font-size:0.8rem;">Prêt à télécharger et à signer</p>
+        </div>
+      </div>
+
+      <div id="contractPreview" style="background:#fff;border-radius:12px;padding:1.5rem;max-height:250px;overflow-y:auto;margin-bottom:1.2rem;font-size:0.8rem;color:#2c3e50;line-height:1.7;"></div>
+
+      <div style="display:flex;gap:0.8rem;">
+        <button class="btn-submit" onclick="downloadPDF()" style="flex:2;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
+          ⬇️ Télécharger le PDF
+        </button>
+        <button class="btn-submit" onclick="closeContractModal()" style="flex:1;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);">Fermer</button>
+      </div>
+      <p style="color:rgba(255,255,255,0.3);font-size:0.75rem;text-align:center;margin-top:0.8rem;">💾 Contrat sauvegardé dans votre espace PME</p>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-header">
+    <span class="section-tag">Témoignages</span>
+    <h2 class="section-title">Ce que disent nos PME</h2>
+    <p class="section-desc">Plus de 2 500 entrepreneurs nous font confiance pour sécuriser leur activité.</p>
+  </div>
+
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"Legal Care PME nous a sauvé d'un litige fournisseur qui aurait pu coûter très cher. La médiation a été résolue en 3 semaines. Je recommande vivement !"</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background: linear-gradient(135deg, #c9a84c, #e8c870);">AK</div>
+        <div>
+          <p class="testi-author-name">Aminata Koné</p>
+          <p class="testi-author-role">Directrice — Koné Textile, Abidjan</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"Le générateur de contrats est incroyable. En 5 minutes j'avais un contrat de prestation professionnel pour mon nouveau client. Plus jamais de problème de non-paiement !"</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background: linear-gradient(135deg, #2980b9, #5ba8d6);">MB</div>
+        <div>
+          <p class="testi-author-name">Mamadou Barry</p>
+          <p class="testi-author-role">Fondateur — TechBuild Solutions, Dakar</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-stars">★★★★☆</div>
+      <p class="testi-text">"L'audit de conformité m'a révélé 4 failles dans mes contrats de travail. Grâce aux recommandations, j'ai pu tout régulariser avant une inspection de l'ONSS."</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background: linear-gradient(135deg, #27ae60, #5ddb8a);">FD</div>
+        <div>
+          <p class="testi-author-name">Fatou Diallo</p>
+          <p class="testi-author-role">Gérante — Diallo & Associés, Ouagadougou</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="section-header">
+    <span class="section-tag">Tarifs</span>
+    <h2 class="section-title">Un investissement, pas une dépense</h2>
+    <p class="section-desc">Des formules adaptées à la taille et aux besoins de votre PME. Commencez gratuitement.</p>
+  </div>
+
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <p class="pricing-name">Starter</p>
+      <p class="pricing-price">Gratuit</p>
+      <p class="pricing-period">Pour toujours</p>
+      <ul class="pricing-features">
+        <li>3 contrats / mois</li>
+        <li>Audit basique</li>
+        <li>1 litige actif</li>
+        <li>Accès formation (2 modules)</li>
+        <li>Alertes email</li>
+      </ul>
+      <button class="pricing-btn outline" onclick="openModal('register')">Commencer</button>
+    </div>
+
+    <div class="pricing-card popular">
+      <div class="popular-badge">⭐ Le plus choisi</div>
+      <p class="pricing-name">Pro PME</p>
+      <p class="pricing-price">29 000 <small>FCFA</small></p>
+      <p class="pricing-period">par mois</p>
+      <ul class="pricing-features">
+        <li>Contrats illimités</li>
+        <li>Audit complet + historique</li>
+        <li>5 litiges simultanés</li>
+        <li>Tous les modules formation</li>
+        <li>Alertes SMS + WhatsApp</li>
+        <li>Support prioritaire</li>
+        <li>Certification PME</li>
+      </ul>
+      <button class="pricing-btn filled" onclick="openModal('register')">S'abonner maintenant</button>
+    </div>
+
+    <div class="pricing-card">
+      <p class="pricing-name">Entreprise</p>
+      <p class="pricing-price">Sur devis</p>
+      <p class="pricing-period">personnalisé</p>
+      <ul class="pricing-features">
+        <li>Tout le plan Pro</li>
+        <li>Multi-utilisateurs</li>
+        <li>Expert juridique dédié</li>
+        <li>Intégration API</li>
+        <li>Rapports analytics</li>
+        <li>Formation équipe sur site</li>
+      </ul>
+      <button class="pricing-btn outline">Nous contacter</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="cta-band">
+  <h2>Prêt à sécuriser votre PME ?</h2>
+  <p>Rejoignez 2 500+ entrepreneurs qui protègent leur activité avec Legal Care PME. <br>Commencez gratuitement, sans carte bancaire.</p>
+  <button class="btn-navy" onclick="openModal('register')">🚀 Créer mon compte PME</button>
+  <button class="btn-outline-white">Voir une démo</button>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo" style="display:inline-flex;">
+        <div class="nav-logo-icon">⚖️</div>
+        <span class="nav-logo-text">Legal Care <span>PME</span></span>
+      </a>
+      <p>La plateforme juridique de référence pour les PME africaines. Sécurisez votre activité, simplifiez votre conformité et résolvez vos litiges en ligne.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Audit Juridique</a></li>
+        <li><a href="#">Générateur Contrats</a></li>
+        <li><a href="#">Médiation</a></li>
+        <li><a href="#">Formation</a></li>
+        <li><a href="#">Alertes</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Ressources</h4>
+      <ul>
+        <li><a href="#">Blog juridique</a></li>
+        <li><a href="#">Guides PDF</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Webinaires</a></li>
+        <li><a href="#">Glossaire</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Légal</h4>
+      <ul>
+        <li><a href="#">Conditions d'utilisation</a></li>
+        <li><a href="#">Politique de confidentialité</a></li>
+        <li><a href="#">Mentions légales</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Legal Care PME. Tous droits réservés.</p>
+    <p>🌍 Ouagadougou · Dakar · Abidjan · Bamako</p>
+  </div>
+</footer>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2>⚖️ Legal Care PME</h2>
+    <p class="modal-sub">Sécurisez votre entreprise dès aujourd'hui</p>
+
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tabLogin" onclick="switchTab('login')">Connexion</button>
+      <button class="modal-tab" id="tabRegister" onclick="switchTab('register')">Créer un compte</button>
+    </div>
+
+    <div id="loginForm">
+      <div class="form-group">
+        <label class="form-label">Adresse email</label>
+        <input type="email" class="form-input" placeholder="contact@maPME.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mot de passe</label>
+        <input type="password" class="form-input" placeholder="••••••••">
+      </div>
+      <button class="btn-submit" onclick="simulateLogin()">Se connecter →</button>
+    </div>
+
+    <div id="registerForm" style="display:none;">
+      <div class="form-group">
+        <label class="form-label">Nom de l'entreprise</label>
+        <input type="text" class="form-input" placeholder="Ex: SARL Diallo & Fils">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Adresse email</label>
+        <input type="email" class="form-input" placeholder="contact@votrePME.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Téléphone (WhatsApp)</label>
+        <input type="tel" class="form-input" placeholder="+226 70 00 00 00">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mot de passe</label>
+        <input type="password" class="form-input" placeholder="Minimum 8 caractères">
+      </div>
+      <button class="btn-submit" onclick="simulateRegister()">Créer mon compte gratuitement →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ===== SUPABASE INIT =====
+  const { createClient } = supabase;
+  const _supabase = createClient(
+    'https://pabwywoaqjyssucarwhz.supabase.co',
+    'sb_publishable_0LdR8oLJMVtLX1RHH0N5Kw_Oipm06BE'
+  );
+
+  // ===== AUTH STATE =====
+  let currentUser = null;
+
+  _supabase.auth.onAuthStateChange((event, session) => {
+    currentUser = session?.user || null;
+    updateNavbar();
+    if (event === 'SIGNED_IN') {
+      closeModal();
+      showToast('✅ Bienvenue sur Legal Care PME !', 'success');
+      showDashboardBanner();
+      setTimeout(loadDashboard, 300);
+    }
+    if (event === 'SIGNED_OUT') {
+      hideDashboardBanner();
+      updateNavbar();
+      document.getElementById('dashNotLoggedIn').style.display = 'block';
+      document.getElementById('dashLoggedIn').style.display = 'none';
+    }
+  });
+
+  function updateNavbar() {
+    const navCta = document.querySelector('.nav-cta');
+    if (currentUser) {
+      const initials = (currentUser.user_metadata?.company_name || currentUser.email || 'U').substring(0,2).toUpperCase();
+      navCta.innerHTML = `
+        <div style="display:flex;align-items:center;gap:0.8rem;">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#c9a84c,#e8c870);display:flex;align-items:center;justify-content:center;font-weight:700;color:#0a1628;font-size:0.85rem;">${initials}</div>
+          <span style="color:rgba(255,255,255,0.8);font-size:0.88rem;">${currentUser.user_metadata?.company_name || currentUser.email}</span>
+          <button class="btn-outline-nav" onclick="signOut()">Déconnexion</button>
+        </div>`;
+    } else {
+      navCta.innerHTML = `
+        <button class="btn-outline-nav" onclick="openModal('login')">Connexion</button>
+        <button class="btn-primary-nav" onclick="openModal('register')">Créer un compte</button>`;
+    }
+  }
+
+  function showDashboardBanner() {
+    let banner = document.getElementById('dashBanner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.id = 'dashBanner';
+      banner.style.cssText = `position:fixed;bottom:2rem;right:2rem;z-index:999;background:#112240;border:1px solid rgba(201,168,76,0.4);border-radius:16px;padding:1.2rem 1.5rem;box-shadow:0 20px 50px rgba(0,0,0,0.4);animation:slideUp 0.4s ease;max-width:300px;`;
+      banner.innerHTML = `
+        <p style="color:rgba(255,255,255,0.5);font-size:0.75rem;margin-bottom:0.3rem;">🎉 Compte connecté</p>
+        <p style="color:#fff;font-weight:600;font-size:0.9rem;margin-bottom:0.8rem;">Accéder à votre Dashboard PME</p>
+        <button onclick="goToDashboard()" style="width:100%;background:linear-gradient(135deg,#c9a84c,#e8c870);color:#0a1628;border:none;padding:0.6rem;border-radius:8px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">Ouvrir le Dashboard →</button>`;
+      document.body.appendChild(banner);
+    }
+  }
+
+  function hideDashboardBanner() {
+    const b = document.getElementById('dashBanner');
+    if (b) b.remove();
+  }
+
+  function goToDashboard() {
+    document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ===== TOAST =====
+  function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    const bg = type === 'success' ? '#27ae60' : type === 'error' ? '#e74c3c' : '#c9a84c';
+    toast.style.cssText = `position:fixed;top:5rem;right:2rem;z-index:3000;background:${bg};color:#fff;padding:0.8rem 1.5rem;border-radius:10px;font-size:0.9rem;font-weight:600;box-shadow:0 8px 25px rgba(0,0,0,0.2);animation:fadeInUp 0.3s ease;font-family:'DM Sans',sans-serif;`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 4000);
+  }
+
+  // ===== MODAL =====
+  function openModal(tab) {
+    document.getElementById('authModal').classList.add('open');
+    switchTab(tab || 'login');
+  }
+
+  function closeModal() {
+    document.getElementById('authModal').classList.remove('open');
+  }
+
+  function switchTab(tab) {
+    document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+    document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+    document.getElementById('tabLogin').className = 'modal-tab' + (tab === 'login' ? ' active' : '');
+    document.getElementById('tabRegister').className = 'modal-tab' + (tab === 'register' ? ' active' : '');
+  }
+
+  // ===== LOGIN =====
+  async function simulateLogin() {
+    const email = document.querySelector('#loginForm input[type="email"]').value.trim();
+    const password = document.querySelector('#loginForm input[type="password"]').value;
+    if (!email || !password) { showToast('Veuillez remplir tous les champs', 'error'); return; }
+
+    const btn = document.querySelector('#loginForm .btn-submit');
+    btn.textContent = 'Connexion...'; btn.disabled = true;
+
+    const { error } = await _supabase.auth.signInWithPassword({ email, password });
+
+    btn.textContent = 'Se connecter →'; btn.disabled = false;
+    if (error) {
+      showToast('❌ ' + (error.message === 'Invalid login credentials' ? 'Email ou mot de passe incorrect' : error.message), 'error');
+    }
+  }
+
+  // ===== REGISTER =====
+  async function simulateRegister() {
+    const company = document.querySelector('#registerForm input[type="text"]').value.trim();
+    const email = document.querySelector('#registerForm input[type="email"]').value.trim();
+    const phone = document.querySelector('#registerForm input[type="tel"]').value.trim();
+    const password = document.querySelector('#registerForm input[type="password"]').value;
+
+    if (!company || !email || !password) { showToast('Veuillez remplir tous les champs obligatoires', 'error'); return; }
+    if (password.length < 6) { showToast('Le mot de passe doit faire au moins 6 caractères', 'error'); return; }
+
+    const btn = document.querySelector('#registerForm .btn-submit');
+    btn.textContent = 'Création...'; btn.disabled = true;
+
+    const { error } = await _supabase.auth.signUp({
+      email, password,
+      options: { data: { company_name: company, phone } }
+    });
+
+    btn.textContent = 'Créer mon compte gratuitement →'; btn.disabled = false;
+
+    if (error) {
+      showToast('❌ ' + error.message, 'error');
+    } else {
+      showToast('🎉 Compte créé ! Vérifiez votre email pour confirmer.', 'success');
+      closeModal();
+    }
+  }
+
+  // ===== SIGN OUT =====
+  async function signOut() {
+    await _supabase.auth.signOut();
+    showToast('👋 Déconnexion réussie', 'info');
+  }
+
+  document.getElementById('authModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+
+  function scrollTo(sel) {
+    const el = document.querySelector(sel);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }
+
+
+  // ===== DASHBOARD REAL DATA =====
+  let allContracts = [];
+  const typeColors = {
+    prestation: { bg: 'rgba(201,168,76,0.15)', color: '#c9a84c' },
+    vente: { bg: 'rgba(41,128,185,0.15)', color: '#5ba8d6' },
+    bail: { bg: 'rgba(155,89,182,0.15)', color: '#bb8de8' },
+    partenariat: { bg: 'rgba(39,174,96,0.15)', color: '#5ddb8a' },
+    travail: { bg: 'rgba(230,126,34,0.15)', color: '#f39c12' },
+    confidentialite: { bg: 'rgba(231,76,60,0.15)', color: '#ff6b6b' }
+  };
+  const typeLabels = {
+    prestation: 'Prestation', vente: 'Vente', bail: 'Bail',
+    partenariat: 'Partenariat', travail: 'Travail', confidentialite: 'NDA'
+  };
+
+  async function loadDashboard() {
+    if (!currentUser) return;
+
+    // Update header info
+    const name = currentUser.user_metadata?.company_name || currentUser.email;
+    const initials = name.substring(0,2).toUpperCase();
+    document.getElementById('realDashAvatar').textContent = initials;
+    document.getElementById('realDashName').textContent = name;
+
+    const hour = new Date().getHours();
+    const greeting = hour < 12 ? 'Bonjour' : hour < 18 ? 'Bon après-midi' : 'Bonsoir';
+    document.getElementById('dashGreeting').textContent = `${greeting}, ${name.split(' ')[0]} !`;
+
+    // Show dashboard, hide login prompt
+    document.getElementById('dashNotLoggedIn').style.display = 'none';
+    document.getElementById('dashLoggedIn').style.display = 'block';
+
+    // Load contracts from Supabase
+    try {
+      const { data, error } = await _supabase
+        .from('contracts')
+        .select('*')
+        .eq('user_id', currentUser.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      allContracts = data || [];
+      updateStats();
+      renderRecentContracts();
+      renderContractsTable(allContracts);
+    } catch(e) {
+      console.log('Erreur chargement contrats:', e.message);
+      allContracts = [];
+      updateStats();
+    }
+  }
+
+  function updateStats() {
+    const total = allContracts.length;
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statTotalSub').textContent = total === 0 ? 'Aucun contrat' : total === 1 ? '1 contrat créé' : `${total} contrats créés`;
+
+    // This month
+    const now = new Date();
+    const thisMonth = allContracts.filter(c => {
+      const d = new Date(c.created_at);
+      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+    }).length;
+    document.getElementById('statMonth').textContent = thisMonth;
+
+    // Top type
+    if (allContracts.length > 0) {
+      const counts = {};
+      allContracts.forEach(c => counts[c.type] = (counts[c.type] || 0) + 1);
+      const top = Object.entries(counts).sort((a,b) => b[1]-a[1])[0];
+      document.getElementById('statTopType').textContent = typeLabels[top[0]] || top[0];
+    } else {
+      document.getElementById('statTopType').textContent = '—';
+    }
+
+    // Last date
+    if (allContracts.length > 0) {
+      const last = new Date(allContracts[0].created_at);
+      document.getElementById('statLastDate').textContent = last.toLocaleDateString('fr-FR', {day:'2-digit',month:'short',year:'numeric'});
+    } else {
+      document.getElementById('statLastDate').textContent = '—';
+    }
+  }
+
+  function renderRecentContracts() {
+    const container = document.getElementById('recentContractsList');
+    if (allContracts.length === 0) {
+      container.innerHTML = `<div style="text-align:center;padding:1.5rem;color:rgba(255,255,255,0.3);font-size:0.82rem;">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">📭</div>
+        Aucun contrat pour l'instant.<br>
+        <span onclick="openContractGenerator()" style="color:var(--gold);cursor:pointer;text-decoration:underline;">Générer votre premier contrat →</span>
+      </div>`;
+      return;
+    }
+    const recent = allContracts.slice(0,4);
+    container.innerHTML = recent.map(c => {
+      const color = typeColors[c.type] || typeColors.prestation;
+      const date = new Date(c.created_at).toLocaleDateString('fr-FR', {day:'2-digit',month:'short'});
+      return `<div class="alert-item" style="justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:0.6rem;">
+          <span style="font-size:0.7rem;padding:0.2rem 0.5rem;border-radius:50px;background:${color.bg};color:${color.color};font-weight:600;">${typeLabels[c.type]||c.type}</span>
+          <span class="alert-text" style="font-size:0.8rem;">${c.objet||'Sans objet'}</span>
+        </div>
+        <span style="color:rgba(255,255,255,0.3);font-size:0.75rem;white-space:nowrap;">${date}</span>
+      </div>`;
+    }).join('');
+  }
+
+  function renderContractsTable(contracts) {
+    const container = document.getElementById('contractsTableContainer');
+    if (contracts.length === 0) {
+      container.innerHTML = `<div style="text-align:center;padding:3rem;color:rgba(255,255,255,0.3);font-size:0.85rem;">
+        <div style="font-size:3rem;margin-bottom:1rem;">📭</div>
+        <p>Aucun contrat trouvé.</p>
+        <button onclick="openContractGenerator()" style="margin-top:1rem;background:linear-gradient(135deg,#c9a84c,#e8c870);color:#0a1628;border:none;padding:0.6rem 1.5rem;border-radius:8px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">+ Créer un contrat</button>
+      </div>`;
+      return;
+    }
+    container.innerHTML = `
+      <div class="contract-row contract-row-header">
+        <span>Objet</span><span>Cocontractant</span><span>Type</span><span>Montant</span><span>Date</span>
+      </div>
+      ${contracts.map(c => {
+        const color = typeColors[c.type] || typeColors.prestation;
+        const date = new Date(c.created_at).toLocaleDateString('fr-FR', {day:'2-digit',month:'short',year:'numeric'});
+        const montant = c.montant ? parseInt(c.montant).toLocaleString('fr-FR') + ' FCFA' : '—';
+        return `<div class="contract-row contract-row-data">
+          <span style="font-weight:500;color:#fff;">${c.objet||'—'}</span>
+          <span>${c.company_b||'—'}</span>
+          <span><span class="contract-type-badge" style="background:${color.bg};color:${color.color};">${typeLabels[c.type]||c.type}</span></span>
+          <span style="color:var(--gold);font-weight:600;">${montant}</span>
+          <span style="color:rgba(255,255,255,0.4);font-size:0.75rem;">${date}</span>
+        </div>`;
+      }).join('')}`;
+  }
+
+  function showDashTab(tab, el) {
+    ['tabOverview','tabContracts','tabAlerts'].forEach(t => {
+      document.getElementById(t).style.display = 'none';
+    });
+    document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).style.display = 'block';
+
+    document.querySelectorAll('.dash-nav-item').forEach(n => n.classList.remove('active'));
+    if (el) el.classList.add('active');
+  }
+
+  function filterContracts(type, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    const filtered = type === 'all' ? allContracts : allContracts.filter(c => c.type === type);
+    renderContractsTable(filtered);
+  }
+
+  // Reload dashboard after contract creation
+  const _origGoStep3 = window.goStep3;
+
+
+  let selectedContractType = null;
+  const contractLabels = {
+    prestation: 'Prestation de Services',
+    vente: 'Vente',
+    bail: 'Bail Commercial',
+    partenariat: 'Partenariat',
+    travail: 'Travail',
+    confidentialite: 'Confidentialité (NDA)'
+  };
+
+  function openContractGenerator() {
+    if (!currentUser) {
+      openModal('login');
+      showToast('⚠️ Connectez-vous pour générer un contrat', 'error');
+      return;
+    }
+    document.getElementById('contractModal').classList.add('open');
+    resetContractGenerator();
+  }
+
+  function closeContractModal() {
+    document.getElementById('contractModal').classList.remove('open');
+  }
+
+  function resetContractGenerator() {
+    selectedContractType = null;
+    document.getElementById('contractStep1').style.display = 'block';
+    document.getElementById('contractStep2').style.display = 'none';
+    document.getElementById('contractStep3').style.display = 'none';
+    document.getElementById('btnStep2').disabled = true;
+    document.querySelectorAll('.contract-type-card').forEach(c => c.classList.remove('selected'));
+    updateStepUI(1);
+  }
+
+  function selectContractType(type, el) {
+    selectedContractType = type;
+    document.querySelectorAll('.contract-type-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('btnStep2').disabled = false;
+  }
+
+  function updateStepUI(step) {
+    [1,2,3].forEach(i => {
+      const dot = document.getElementById('dot'+i);
+      dot.className = 'step-dot' + (i < step ? ' done' : i === step ? ' active' : '');
+      if (i < 3) {
+        const line = document.getElementById('line'+i);
+        line.className = 'step-line' + (i < step ? ' active' : '');
+      }
+    });
+  }
+
+  function goStep1() {
+    document.getElementById('contractStep2').style.display = 'none';
+    document.getElementById('contractStep1').style.display = 'block';
+    updateStepUI(1);
+  }
+
+  function goStep2() {
+    if (!selectedContractType) return;
+    document.getElementById('contractStep1').style.display = 'none';
+    document.getElementById('contractStep2').style.display = 'block';
+    updateStepUI(2);
+    // Pre-fill company name if user is logged in
+    if (currentUser?.user_metadata?.company_name) {
+      document.getElementById('cf_company_a').value = currentUser.user_metadata.company_name;
+    }
+  }
+
+  function goStep3() {
+    const companyA = document.getElementById('cf_company_a').value.trim();
+    const companyB = document.getElementById('cf_company_b').value.trim();
+    const objet = document.getElementById('cf_objet').value.trim();
+    const montant = document.getElementById('cf_montant').value.trim();
+    if (!companyA || !companyB || !objet || !montant) {
+      showToast('⚠️ Remplissez les champs obligatoires (*)', 'error'); return;
+    }
+    document.getElementById('contractStep2').style.display = 'none';
+    document.getElementById('contractStep3').style.display = 'block';
+    updateStepUI(3);
+
+    const label = contractLabels[selectedContractType];
+    document.getElementById('contractFileName').textContent = `Contrat_${label.replace(/ /g,'_')}_${companyA.replace(/ /g,'_')}.pdf`;
+    document.getElementById('contractPreview').innerHTML = generateContractHTML();
+    saveContractToSupabase();
+  }
+
+  function generateContractHTML() {
+    const companyA = document.getElementById('cf_company_a').value.trim();
+    const companyB = document.getElementById('cf_company_b').value.trim();
+    const objet = document.getElementById('cf_objet').value.trim();
+    const montant = parseInt(document.getElementById('cf_montant').value).toLocaleString('fr-FR');
+    const duree = document.getElementById('cf_duree').value.trim() || 'Non définie';
+    const dateDebut = document.getElementById('cf_date_debut').value || new Date().toISOString().split('T')[0];
+    const ville = document.getElementById('cf_ville').value.trim() || 'Ouagadougou, Burkina Faso';
+    const clauses = document.getElementById('cf_clauses').value.trim();
+    const label = contractLabels[selectedContractType];
+    const today = new Date().toLocaleDateString('fr-FR', {year:'numeric',month:'long',day:'numeric'});
+
+    return `
+      <div style="font-family:Georgia,serif;color:#1a1a2e;padding:0.5rem;">
+        <div style="text-align:center;border-bottom:2px solid #c9a84c;padding-bottom:1rem;margin-bottom:1rem;">
+          <h2 style="font-size:1.1rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;">CONTRAT DE ${label.toUpperCase()}</h2>
+          <p style="font-size:0.75rem;color:#666;margin-top:0.3rem;">Réf: LCP-${Date.now().toString().slice(-6)}</p>
+        </div>
+        <p style="font-size:0.82rem;margin-bottom:0.8rem;"><strong>Entre les soussignés :</strong></p>
+        <p style="font-size:0.82rem;margin-bottom:0.5rem;"><strong>Partie A :</strong> ${companyA}, ci-après dénommée "le Prestataire"</p>
+        <p style="font-size:0.82rem;margin-bottom:1rem;"><strong>Partie B :</strong> ${companyB}, ci-après dénommée "le Client"</p>
+        <p style="font-size:0.82rem;font-weight:700;margin-bottom:0.5rem;border-left:3px solid #c9a84c;padding-left:0.5rem;">ARTICLE 1 — OBJET DU CONTRAT</p>
+        <p style="font-size:0.82rem;margin-bottom:1rem;">${companyA} s'engage à fournir à ${companyB} la prestation suivante : <strong>${objet}</strong>.</p>
+        <p style="font-size:0.82rem;font-weight:700;margin-bottom:0.5rem;border-left:3px solid #c9a84c;padding-left:0.5rem;">ARTICLE 2 — DURÉE</p>
+        <p style="font-size:0.82rem;margin-bottom:1rem;">Le présent contrat prend effet le <strong>${dateDebut}</strong> pour une durée de <strong>${duree}</strong>.</p>
+        <p style="font-size:0.82rem;font-weight:700;margin-bottom:0.5rem;border-left:3px solid #c9a84c;padding-left:0.5rem;">ARTICLE 3 — RÉMUNÉRATION</p>
+        <p style="font-size:0.82rem;margin-bottom:1rem;">En contrepartie des services rendus, ${companyB} versera à ${companyA} la somme de <strong>${montant} FCFA</strong>.</p>
+        ${clauses ? `<p style="font-size:0.82rem;font-weight:700;margin-bottom:0.5rem;border-left:3px solid #c9a84c;padding-left:0.5rem;">ARTICLE 4 — CLAUSES PARTICULIÈRES</p><p style="font-size:0.82rem;margin-bottom:1rem;">${clauses}</p>` : ''}
+        <p style="font-size:0.82rem;font-weight:700;margin-bottom:0.5rem;border-left:3px solid #c9a84c;padding-left:0.5rem;">ARTICLE ${clauses ? 5 : 4} — DROIT APPLICABLE</p>
+        <p style="font-size:0.82rem;margin-bottom:1.5rem;">Le présent contrat est soumis au droit en vigueur à ${ville}. Tout litige sera résolu à l'amiable ou devant les tribunaux compétents.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.5rem;border-top:1px solid #ddd;padding-top:1rem;">
+          <div>
+            <p style="font-size:0.78rem;font-weight:700;">Fait à ${ville}, le ${today}</p>
+            <p style="font-size:0.78rem;margin-top:1rem;color:#666;">Signature de ${companyA} :</p>
+            <div style="border-bottom:1px solid #999;margin-top:2rem;width:80%;"></div>
+          </div>
+          <div>
+            <p style="font-size:0.78rem;font-weight:700;">&nbsp;</p>
+            <p style="font-size:0.78rem;margin-top:1rem;color:#666;">Signature de ${companyB} :</p>
+            <div style="border-bottom:1px solid #999;margin-top:2rem;width:80%;"></div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  async function saveContractToSupabase() {
+    if (!currentUser) return;
+    try {
+      await _supabase.from('contracts').insert({
+        user_id: currentUser.id,
+        type: selectedContractType,
+        company_a: document.getElementById('cf_company_a').value.trim(),
+        company_b: document.getElementById('cf_company_b').value.trim(),
+        objet: document.getElementById('cf_objet').value.trim(),
+        montant: document.getElementById('cf_montant').value,
+        created_at: new Date().toISOString()
+      });
+      // Refresh dashboard data
+      setTimeout(loadDashboard, 500);
+    } catch(e) { console.log('Sauvegarde Supabase:', e.message); }
+  }
+
+  function downloadPDF() {
+    const btn = document.querySelector('#contractStep3 .btn-submit');
+    btn.textContent = '⏳ Génération PDF...'; btn.disabled = true;
+
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    script.onload = () => {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+      const companyA = document.getElementById('cf_company_a').value.trim();
+      const companyB = document.getElementById('cf_company_b').value.trim();
+      const objet = document.getElementById('cf_objet').value.trim();
+      const montant = parseInt(document.getElementById('cf_montant').value).toLocaleString('fr-FR');
+      const duree = document.getElementById('cf_duree').value.trim() || 'Non définie';
+      const dateDebut = document.getElementById('cf_date_debut').value || new Date().toISOString().split('T')[0];
+      const ville = document.getElementById('cf_ville').value.trim() || 'Ouagadougou, Burkina Faso';
+      const clauses = document.getElementById('cf_clauses').value.trim();
+      const label = contractLabels[selectedContractType];
+      const today = new Date().toLocaleDateString('fr-FR', {year:'numeric',month:'long',day:'numeric'});
+      const ref = 'LCP-' + Date.now().toString().slice(-6);
+
+      // Header gold bar
+      doc.setFillColor(201, 168, 76);
+      doc.rect(0, 0, 210, 8, 'F');
+
+      // Logo area
+      doc.setFillColor(10, 22, 40);
+      doc.rect(0, 8, 210, 25, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(18); doc.setFont('helvetica', 'bold');
+      doc.text('LEGAL CARE PME', 105, 20, { align: 'center' });
+      doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+      doc.setTextColor(201, 168, 76);
+      doc.text('Plateforme juridique pour PME', 105, 27, { align: 'center' });
+
+      // Title
+      doc.setTextColor(10, 22, 40);
+      doc.setFontSize(14); doc.setFont('helvetica', 'bold');
+      doc.text(`CONTRAT DE ${label.toUpperCase()}`, 105, 48, { align: 'center' });
+      doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+      doc.setTextColor(120, 120, 120);
+      doc.text(`Référence : ${ref}`, 105, 55, { align: 'center' });
+
+      // Divider
+      doc.setDrawColor(201, 168, 76); doc.setLineWidth(0.5);
+      doc.line(15, 60, 195, 60);
+
+      let y = 70;
+      const addSection = (title, content) => {
+        doc.setFillColor(248, 244, 236);
+        doc.rect(15, y-5, 180, 8, 'F');
+        doc.setFillColor(201, 168, 76);
+        doc.rect(15, y-5, 3, 8, 'F');
+        doc.setTextColor(10, 22, 40); doc.setFontSize(10); doc.setFont('helvetica', 'bold');
+        doc.text(title, 22, y+0.5);
+        y += 10;
+        doc.setTextColor(44, 62, 80); doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+        const lines = doc.splitTextToSize(content, 170);
+        doc.text(lines, 18, y);
+        y += lines.length * 5 + 6;
+      };
+
+      doc.setTextColor(44, 62, 80); doc.setFontSize(9);
+      doc.text('Entre les soussignés :', 18, y); y += 6;
+      doc.setFont('helvetica', 'bold'); doc.text(`Partie A : ${companyA}`, 18, y); y += 5;
+      doc.setFont('helvetica', 'bold'); doc.text(`Partie B : ${companyB}`, 18, y); y += 10;
+
+      addSection('ARTICLE 1 — OBJET DU CONTRAT', `${companyA} s'engage à fournir à ${companyB} la prestation suivante : ${objet}.`);
+      addSection('ARTICLE 2 — DURÉE', `Le présent contrat prend effet le ${dateDebut} pour une durée de ${duree}.`);
+      addSection('ARTICLE 3 — RÉMUNÉRATION', `En contrepartie des services rendus, ${companyB} versera à ${companyA} la somme de ${montant} FCFA.`);
+      if (clauses) addSection('ARTICLE 4 — CLAUSES PARTICULIÈRES', clauses);
+      addSection(`ARTICLE ${clauses ? 5 : 4} — DROIT APPLICABLE`, `Le présent contrat est soumis au droit en vigueur à ${ville}. Tout litige sera résolu à l'amiable ou devant les tribunaux compétents.`);
+
+      // Signatures
+      y += 5;
+      doc.setDrawColor(200, 200, 200); doc.setLineWidth(0.3);
+      doc.line(15, y, 195, y); y += 10;
+      doc.setTextColor(10, 22, 40); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+      doc.text(`Fait à ${ville}, le ${today}`, 18, y); y += 12;
+      doc.setFont('helvetica', 'normal'); doc.setTextColor(100, 100, 100);
+      doc.text(`Signature de ${companyA} :`, 18, y);
+      doc.text(`Signature de ${companyB} :`, 115, y); y += 15;
+      doc.setDrawColor(100, 100, 100);
+      doc.line(18, y, 90, y);
+      doc.line(115, y, 187, y);
+
+      // Footer
+      doc.setFillColor(10, 22, 40);
+      doc.rect(0, 282, 210, 15, 'F');
+      doc.setTextColor(201, 168, 76); doc.setFontSize(7);
+      doc.text('Legal Care PME — legalcarepme.com | Document généré automatiquement', 105, 290, { align: 'center' });
+
+      const fileName = `Contrat_${label.replace(/ /g,'_')}_${companyA.replace(/ /g,'_')}.pdf`;
+      doc.save(fileName);
+      btn.textContent = '⬇️ Télécharger le PDF'; btn.disabled = false;
+      showToast('✅ PDF téléchargé avec succès !', 'success');
+    };
+    document.head.appendChild(script);
+  }
+
+  document.getElementById('contractModal').addEventListener('click', function(e) {
+    if (e.target === this) closeContractModal();
+  });
+
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.animation = 'fadeInUp 0.6s ease forwards';
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.service-card, .testi-card, .module-card, .impact-card, .pricing-card').forEach(el => {
+    el.style.opacity = '0';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
