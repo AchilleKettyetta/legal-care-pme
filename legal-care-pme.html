@@ -807,47 +807,6 @@
 
   .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,168,76,0.4); }
 
-  /* ===== AUDIT MODULE ===== */
-  .audit-questions { display:flex; flex-direction:column; gap:0.8rem; margin-bottom:1.5rem; }
-  .audit-question {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 12px; padding: 1rem;
-  }
-  .audit-question p { color: rgba(255,255,255,0.8); font-size:0.88rem; font-weight:500; margin-bottom:0.7rem; }
-  .audit-options { display:flex; gap:0.5rem; }
-  .audit-opt {
-    flex:1; padding:0.5rem; border-radius:8px; text-align:center;
-    font-size:0.8rem; font-weight:600; cursor:pointer;
-    border: 1px solid rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.04);
-    color: rgba(255,255,255,0.5);
-    transition: all 0.2s; font-family:'DM Sans',sans-serif;
-  }
-  .audit-opt:hover { border-color: var(--gold); color: var(--gold); }
-  .audit-opt.selected-yes { background:rgba(39,174,96,0.15); border-color:#5ddb8a; color:#5ddb8a; }
-  .audit-opt.selected-no { background:rgba(231,76,60,0.15); border-color:#ff6b6b; color:#ff6b6b; }
-  .audit-opt.selected-partial { background:rgba(230,126,34,0.15); border-color:#f39c12; color:#f39c12; }
-  .audit-cat-score {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius:10px; padding:0.8rem; text-align:center;
-  }
-  .audit-cat-score .cat-name { color:rgba(255,255,255,0.5); font-size:0.75rem; margin-bottom:0.3rem; }
-  .audit-cat-score .cat-val { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; }
-  .reco-item {
-    display:flex; gap:0.7rem; align-items:flex-start;
-    padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05);
-    font-size:0.82rem;
-  }
-  .reco-priority {
-    font-size:0.68rem; padding:0.2rem 0.5rem; border-radius:50px;
-    font-weight:700; white-space:nowrap; flex-shrink:0;
-  }
-  .priority-high { background:rgba(231,76,60,0.2); color:#ff6b6b; }
-  .priority-mid { background:rgba(230,126,34,0.2); color:#f39c12; }
-  .priority-low { background:rgba(39,174,96,0.2); color:#5ddb8a; }
-
   /* ===== FILTER BUTTONS ===== */
   .filter-btn {
     background: rgba(255,255,255,0.05);
@@ -1285,7 +1244,7 @@
         <div class="module-feature">Plan de médiation automatique</div>
         <div class="module-feature">Suivi en temps réel des étapes</div>
       </div>
-      <button class="module-cta-btn">Soumettre un litige →</button>
+      <button class="module-cta-btn" onclick="openMediationModal()">Soumettre un litige →</button>
     </div>
 
     <div class="module-card">
@@ -1325,93 +1284,6 @@
     </div>
   </div>
 </section>
-
-<!-- AUDIT MODAL -->
-<div class="modal-overlay" id="auditModal">
-  <div class="modal" style="max-width:680px;width:95%;max-height:90vh;overflow-y:auto;">
-    <button class="modal-close" onclick="closeAuditModal()">✕</button>
-
-    <!-- ETAPE INDICATOR -->
-    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.5rem;" id="auditStepIndicator">
-      <div class="step-dot active" id="adot1">1</div>
-      <div class="step-line" id="aline1"></div>
-      <div class="step-dot" id="adot2">2</div>
-      <div class="step-line" id="aline2"></div>
-      <div class="step-dot" id="adot3">3</div>
-      <div class="step-line" id="aline3"></div>
-      <div class="step-dot" id="adot4">4</div>
-    </div>
-
-    <!-- STEP 1 : FISCALITE -->
-    <div id="auditStep1">
-      <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.5rem;margin-bottom:0.3rem;">🧾 Fiscalité</h2>
-      <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-bottom:1.5rem;">Étape 1/4 — Vérifiez votre conformité fiscale</p>
-      <div id="auditQ1" class="audit-questions"></div>
-      <button class="btn-submit" onclick="auditNext(1)">Suivant →</button>
-    </div>
-
-    <!-- STEP 2 : SOCIAL -->
-    <div id="auditStep2" style="display:none;">
-      <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.5rem;margin-bottom:0.3rem;">👥 Droit Social</h2>
-      <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-bottom:1.5rem;">Étape 2/4 — Vérifiez votre conformité sociale</p>
-      <div id="auditQ2" class="audit-questions"></div>
-      <div style="display:flex;gap:0.8rem;">
-        <button class="btn-submit" onclick="auditPrev(2)" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);flex:1;">← Retour</button>
-        <button class="btn-submit" onclick="auditNext(2)" style="flex:2;">Suivant →</button>
-      </div>
-    </div>
-
-    <!-- STEP 3 : CONTRATS -->
-    <div id="auditStep3" style="display:none;">
-      <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.5rem;margin-bottom:0.3rem;">📝 Contrats & Statuts</h2>
-      <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-bottom:1.5rem;">Étape 3/4 — Vérifiez vos contrats et statuts</p>
-      <div id="auditQ3" class="audit-questions"></div>
-      <div style="display:flex;gap:0.8rem;">
-        <button class="btn-submit" onclick="auditPrev(3)" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);flex:1;">← Retour</button>
-        <button class="btn-submit" onclick="auditNext(3)" style="flex:2;">Suivant →</button>
-      </div>
-    </div>
-
-    <!-- STEP 4 : NUMERIQUE -->
-    <div id="auditStep4" style="display:none;">
-      <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.5rem;margin-bottom:0.3rem;">💻 Numérique & Données</h2>
-      <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-bottom:1.5rem;">Étape 4/4 — Vérifiez votre conformité numérique</p>
-      <div id="auditQ4" class="audit-questions"></div>
-      <div style="display:flex;gap:0.8rem;">
-        <button class="btn-submit" onclick="auditPrev(4)" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);flex:1;">← Retour</button>
-        <button class="btn-submit" onclick="calculateAudit()" style="flex:2;">Voir mes résultats →</button>
-      </div>
-    </div>
-
-    <!-- STEP 5 : RESULTATS -->
-    <div id="auditStep5" style="display:none;">
-      <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.5rem;margin-bottom:0.3rem;">📊 Résultats de votre Audit</h2>
-      <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-bottom:1.5rem;">Voici votre score de conformité légale</p>
-
-      <!-- SCORE GLOBAL -->
-      <div style="text-align:center;margin-bottom:1.5rem;">
-        <div id="auditScoreCircle" style="width:120px;height:120px;border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;flex-direction:column;border:4px solid var(--gold);">
-          <span id="auditScoreNum" style="font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;color:var(--gold);">0%</span>
-        </div>
-        <p id="auditScoreLabel" style="color:#fff;font-weight:700;font-size:1rem;"></p>
-      </div>
-
-      <!-- SCORES PAR CATEGORIE -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1.5rem;" id="auditCatScores"></div>
-
-      <!-- RECOMMANDATIONS -->
-      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:1.2rem;margin-bottom:1.2rem;">
-        <p style="color:rgba(255,255,255,0.7);font-size:0.82rem;font-weight:600;margin-bottom:0.8rem;">⚡ Recommandations prioritaires</p>
-        <div id="auditRecommendations"></div>
-      </div>
-
-      <div style="display:flex;gap:0.8rem;">
-        <button class="btn-submit" onclick="downloadAuditPDF()" style="flex:2;">⬇️ Télécharger le rapport PDF</button>
-        <button class="btn-submit" onclick="closeAuditModal()" style="flex:1;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);">Fermer</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- CONTRACT GENERATOR MODAL -->
 <div class="modal-overlay" id="contractModal">
@@ -1533,6 +1405,138 @@
         <button class="btn-submit" onclick="closeContractModal()" style="flex:1;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);">Fermer</button>
       </div>
       <p style="color:rgba(255,255,255,0.3);font-size:0.75rem;text-align:center;margin-top:0.8rem;">💾 Contrat sauvegardé dans votre espace PME</p>
+    </div>
+  </div>
+</div>
+
+<!-- MEDIATION MODAL -->
+<div class="modal-overlay" id="mediationModal">
+  <div class="modal" style="max-width:660px;width:95%;max-height:90vh;overflow-y:auto;">
+    <button class="modal-close" onclick="closeMediationModal()">✕</button>
+
+    <!-- STEP INDICATOR -->
+    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.5rem;">
+      <div class="step-dot active" id="mdot1">1</div>
+      <div class="step-line" id="mline1"></div>
+      <div class="step-dot" id="mdot2">2</div>
+      <div class="step-line" id="mline2"></div>
+      <div class="step-dot" id="mdot3">3</div>
+    </div>
+
+    <!-- STEP 1 : TYPE DE LITIGE -->
+    <div id="mediationStep1">
+      <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.5rem;margin-bottom:0.3rem;">⚖️ Soumettre un litige</h2>
+      <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-bottom:1.5rem;">Étape 1 — Choisissez la catégorie du litige</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1.5rem;">
+        <div class="contract-type-card" onclick="selectLitigeType('associes', this)">
+          <span style="font-size:1.5rem;">🤝</span>
+          <span class="ct-name">Litige entre associés</span>
+          <span class="ct-desc">Conflits internes à l'entreprise</span>
+        </div>
+        <div class="contract-type-card" onclick="selectLitigeType('client', this)">
+          <span style="font-size:1.5rem;">🛒</span>
+          <span class="ct-name">Litige avec un client</span>
+          <span class="ct-desc">Non-paiement, mauvaise foi</span>
+        </div>
+        <div class="contract-type-card" onclick="selectLitigeType('fournisseur', this)">
+          <span style="font-size:1.5rem;">📦</span>
+          <span class="ct-name">Litige fournisseur</span>
+          <span class="ct-desc">Livraison, qualité, contrat</span>
+        </div>
+        <div class="contract-type-card" onclick="selectLitigeType('bail', this)">
+          <span style="font-size:1.5rem;">🏢</span>
+          <span class="ct-name">Litige de bail</span>
+          <span class="ct-desc">Local commercial, loyer</span>
+        </div>
+        <div class="contract-type-card" onclick="selectLitigeType('travail', this)">
+          <span style="font-size:1.5rem;">👤</span>
+          <span class="ct-name">Litige employé</span>
+          <span class="ct-desc">Licenciement, salaire, conflit</span>
+        </div>
+        <div class="contract-type-card" onclick="selectLitigeType('fiscal', this)">
+          <span style="font-size:1.5rem;">🧾</span>
+          <span class="ct-name">Litige fiscal</span>
+          <span class="ct-desc">Redressement, amendes</span>
+        </div>
+      </div>
+      <button class="btn-submit" id="btnMedStep2" onclick="mediationNext(1)" disabled>Suivant →</button>
+    </div>
+
+    <!-- STEP 2 : DETAILS -->
+    <div id="mediationStep2" style="display:none;">
+      <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.5rem;margin-bottom:0.3rem;">📋 Détails du litige</h2>
+      <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-bottom:1.5rem;">Étape 2 — Décrivez votre situation</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
+        <div class="form-group">
+          <label class="form-label">Votre entreprise *</label>
+          <input type="text" class="form-input" id="lit_company" placeholder="Ex: SARL Diallo & Fils">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Partie adverse *</label>
+          <input type="text" class="form-input" id="lit_adversaire" placeholder="Ex: Koné Industries">
+        </div>
+        <div class="form-group" style="grid-column:span 2;">
+          <label class="form-label">Description du problème *</label>
+          <textarea class="form-input" id="lit_description" rows="4" placeholder="Décrivez clairement le litige : que s'est-il passé, depuis quand, quel est le préjudice..." style="resize:vertical;"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Montant en jeu (FCFA)</label>
+          <input type="number" class="form-input" id="lit_montant" placeholder="Ex: 500000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date du début du litige</label>
+          <input type="date" class="form-input" id="lit_date">
+        </div>
+        <div class="form-group" style="grid-column:span 2;">
+          <label class="form-label">Tentatives de résolution déjà faites ?</label>
+          <textarea class="form-input" id="lit_tentatives" rows="2" placeholder="Ex: Appels téléphoniques, lettres de mise en demeure..." style="resize:vertical;"></textarea>
+        </div>
+        <div class="form-group" style="grid-column:span 2;">
+          <label class="form-label">Résultat souhaité</label>
+          <input type="text" class="form-input" id="lit_resultat" placeholder="Ex: Remboursement de 500 000 FCFA, résiliation du contrat...">
+        </div>
+      </div>
+
+      <div style="display:flex;gap:0.8rem;margin-top:1rem;">
+        <button class="btn-submit" onclick="mediationPrev(2)" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);flex:1;">← Retour</button>
+        <button class="btn-submit" onclick="mediationNext(2)" style="flex:2;">Générer le plan →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 : PLAN DE MEDIATION -->
+    <div id="mediationStep3" style="display:none;">
+      <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.5rem;margin-bottom:0.3rem;">🗺️ Plan de Médiation</h2>
+      <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-bottom:1.5rem;">Étape 3 — Votre plan de résolution personnalisé</p>
+
+      <!-- STATUT -->
+      <div style="background:rgba(41,128,185,0.1);border:1px solid rgba(41,128,185,0.3);border-radius:12px;padding:1rem;margin-bottom:1.2rem;display:flex;align-items:center;gap:1rem;">
+        <span style="font-size:2rem;">📋</span>
+        <div>
+          <p style="color:#5ba8d6;font-weight:700;font-size:0.95rem;" id="litStatut">Litige enregistré</p>
+          <p style="color:rgba(255,255,255,0.45);font-size:0.8rem;" id="litRef">Référence : LIT-000000</p>
+        </div>
+        <span style="margin-left:auto;background:rgba(230,126,34,0.2);color:#f39c12;font-size:0.75rem;font-weight:700;padding:0.3rem 0.8rem;border-radius:50px;">EN COURS</span>
+      </div>
+
+      <!-- ETAPES DE MEDIATION -->
+      <div style="margin-bottom:1.2rem;">
+        <p style="color:rgba(255,255,255,0.7);font-size:0.82rem;font-weight:600;margin-bottom:0.8rem;">📍 Étapes de résolution recommandées</p>
+        <div id="mediationPlan"></div>
+      </div>
+
+      <!-- RECOMMANDATION EXPERT -->
+      <div id="expertReco" style="background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.3);border-radius:12px;padding:1rem;margin-bottom:1.2rem;">
+        <p style="color:var(--gold);font-weight:700;font-size:0.88rem;margin-bottom:0.4rem;">💡 Recommandation de l'expert</p>
+        <p id="expertRecoText" style="color:rgba(255,255,255,0.6);font-size:0.82rem;line-height:1.6;"></p>
+      </div>
+
+      <div style="display:flex;gap:0.8rem;">
+        <button class="btn-submit" onclick="downloadMediationPDF()" style="flex:2;">⬇️ Télécharger le plan PDF</button>
+        <button class="btn-submit" onclick="closeMediationModal()" style="flex:1;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);">Fermer</button>
+      </div>
+      <p style="color:rgba(255,255,255,0.3);font-size:0.75rem;text-align:center;margin-top:0.8rem;">💾 Litige sauvegardé dans votre espace PME</p>
     </div>
   </div>
 </div>
@@ -2312,237 +2316,256 @@
     document.head.appendChild(script);
   }
 
+
   document.getElementById('contractModal').addEventListener('click', function(e) {
     if (e.target === this) closeContractModal();
   });
 
-  // ===== AUDIT MODULE =====
-  const auditData = {
-    1: [
-      { id:'f1', q:"Êtes-vous enregistré auprès de l'administration fiscale ?", cat:'fiscalite' },
-      { id:'f2', q:"Tenez-vous une comptabilité régulière à jour ?", cat:'fiscalite' },
-      { id:'f3', q:"Déclarez-vous et payez-vous la TVA correctement ?", cat:'fiscalite' },
-      { id:'f4', q:"Payez-vous l'impôt sur les bénéfices dans les délais ?", cat:'fiscalite' },
-      { id:'f5', q:"Conservez-vous vos documents fiscaux pendant 10 ans ?", cat:'fiscalite' },
-    ],
-    2: [
-      { id:'s1', q:"Tous vos employés ont-ils un contrat de travail écrit ?", cat:'social' },
-      { id:'s2', q:"Êtes-vous affilié à la Caisse de Sécurité Sociale ?", cat:'social' },
-      { id:'s3', q:"Payez-vous les cotisations sociales dans les délais ?", cat:'social' },
-      { id:'s4', q:"Respectez-vous le SMIG en vigueur dans votre pays ?", cat:'social' },
-      { id:'s5', q:"Avez-vous un registre du personnel à jour ?", cat:'social' },
-    ],
-    3: [
-      { id:'c1', q:"Vos statuts d'entreprise sont-ils à jour et déposés ?", cat:'contrats' },
-      { id:'c2', q:"Utilisez-vous des contrats écrits avec vos clients ?", cat:'contrats' },
-      { id:'c3', q:"Vos contrats fournisseurs sont-ils signés et archivés ?", cat:'contrats' },
-      { id:'c4', q:"Avez-vous des contrats de confidentialité avec vos partenaires ?", cat:'contrats' },
-      { id:'c5', q:"Vos contrats de travail respectent-ils le droit du travail local ?", cat:'contrats' },
-    ],
-    4: [
-      { id:'n1', q:"Protégez-vous les données personnelles de vos clients ?", cat:'numerique' },
-      { id:'n2', q:"Avez-vous une politique de confidentialité sur votre site web ?", cat:'numerique' },
-      { id:'n3', q:"Vos systèmes informatiques sont-ils sécurisés (antivirus, mots de passe) ?", cat:'numerique' },
-      { id:'n4', q:"Sauvegardez-vous régulièrement vos données professionnelles ?", cat:'numerique' },
-      { id:'n5', q:"Avez-vous déclaré vos traitements de données à l'autorité compétente ?", cat:'numerique' },
-    ]
+  // ===== MEDIATION MODULE =====
+  let selectedLitigeType = null;
+
+  const litigeLabels = {
+    associes: 'Litige entre associés', client: 'Litige avec un client',
+    fournisseur: 'Litige fournisseur', bail: 'Litige de bail',
+    travail: 'Litige employé', fiscal: 'Litige fiscal'
   };
 
-  const auditAnswers = {};
+  const mediationPlans = {
+    associes: [
+      { step:1, title:'Réunion interne', desc:'Organisez une réunion formelle entre les associés pour exposer les griefs de chaque partie.', delai:'3-5 jours', icon:'🤝' },
+      { step:2, title:'Consultation des statuts', desc:'Vérifiez les clauses de vos statuts concernant la résolution des conflits entre associés.', delai:'1 semaine', icon:'📋' },
+      { step:3, title:'Médiation amiable', desc:'Faites appel à un médiateur neutre accepté par les deux parties pour faciliter le dialogue.', delai:'2-4 semaines', icon:'⚖️' },
+      { step:4, title:'Accord de sortie ou restructuration', desc:'Rédigez un accord formel ou envisagez une restructuration de l\'actionnariat.', delai:'1 mois', icon:'✍️' },
+    ],
+    client: [
+      { step:1, title:'Mise en demeure écrite', desc:'Envoyez une lettre de mise en demeure formelle au client avec délai de réponse de 15 jours.', delai:'Immédiat', icon:'📬' },
+      { step:2, title:'Négociation directe', desc:'Proposez un accord amiable : échéancier de paiement, réduction partielle, livraison complémentaire.', delai:'1-2 semaines', icon:'🤝' },
+      { step:3, title:'Médiation commerciale', desc:'Saisissez un centre de médiation commerciale pour une résolution rapide et confidentielle.', delai:'3-6 semaines', icon:'⚖️' },
+      { step:4, title:'Procédure judiciaire', desc:'En dernier recours, engagez une procédure devant le tribunal de commerce compétent.', delai:'3-6 mois', icon:'🏛️' },
+    ],
+    fournisseur: [
+      { step:1, title:'Constat écrit du problème', desc:'Documentez le problème (photos, courriels, bons de livraison) et notifiez le fournisseur par écrit.', delai:'Immédiat', icon:'📸' },
+      { step:2, title:'Réclamation formelle', desc:'Envoyez une réclamation formelle avec demande de remplacement, remboursement ou pénalités.', delai:'1 semaine', icon:'📬' },
+      { step:3, title:'Négociation et accord', desc:'Négociez un accord commercial (avoir, remplacement, réduction future) avec le fournisseur.', delai:'2-3 semaines', icon:'🤝' },
+      { step:4, title:'Arbitrage ou tribunal', desc:'Saisissez un arbitre ou le tribunal compétent selon les clauses de votre contrat fournisseur.', delai:'1-3 mois', icon:'⚖️' },
+    ],
+    bail: [
+      { step:1, title:'Relecture du contrat de bail', desc:'Analysez les clauses du bail concernant les obligations du bailleur et du locataire.', delai:'Immédiat', icon:'📋' },
+      { step:2, title:'Notification écrite au bailleur', desc:'Adressez une lettre recommandée au bailleur exposant le problème et vos demandes.', delai:'1 semaine', icon:'📬' },
+      { step:3, title:'Médiation locative', desc:'Faites appel à un médiateur spécialisé en droit immobilier commercial.', delai:'2-4 semaines', icon:'⚖️' },
+      { step:4, title:'Tribunal compétent', desc:'Saisissez le tribunal compétent pour les litiges locatifs dans votre juridiction.', delai:'2-4 mois', icon:'🏛️' },
+    ],
+    travail: [
+      { step:1, title:'Entretien préalable', desc:'Organisez un entretien formel avec l\'employé, assisté si possible d\'un représentant du personnel.', delai:'Immédiat', icon:'💬' },
+      { step:2, title:'Consultation DRH ou conseiller', desc:'Consultez un expert en droit du travail pour vérifier la légalité de votre position.', delai:'1 semaine', icon:'👨‍💼' },
+      { step:3, title:'Médiation travail', desc:'Proposez une médiation à l\'inspection du travail ou via un médiateur certifié.', delai:'2-4 semaines', icon:'⚖️' },
+      { step:4, title:'Tribunal du travail', desc:'Saisissez le conseil de prud\'hommes ou le tribunal du travail compétent.', delai:'2-6 mois', icon:'🏛️' },
+    ],
+    fiscal: [
+      { step:1, title:'Analyse de l\'avis fiscal', desc:'Analysez en détail l\'avis de redressement ou l\'amende reçue avec votre comptable.', delai:'Immédiat', icon:'🔍' },
+      { step:2, title:'Réclamation contentieuse', desc:'Déposez une réclamation contentieuse auprès de l\'administration fiscale dans les délais légaux.', delai:'30 jours max', icon:'📬' },
+      { step:3, title:'Demande de sursis', desc:'Demandez un sursis à paiement pendant l\'instruction de votre réclamation.', delai:'1-2 semaines', icon:'⏸️' },
+      { step:4, title:'Recours judiciaire', desc:'En cas de rejet, saisissez le tribunal administratif ou fiscal compétent.', delai:'2-6 mois', icon:'🏛️' },
+    ],
+  };
 
-  function openAuditModal() {
-    if (!currentUser) { openModal('login'); showToast('⚠️ Connectez-vous pour lancer un audit', 'error'); return; }
-    document.getElementById('auditModal').classList.add('open');
-    renderAuditQuestions();
-    resetAuditSteps();
-    updateAuditStepUI(1);
+  const expertRecos = {
+    associes: "Les conflits entre associés peuvent être évités en amont grâce à une convention d'associés bien rédigée. Nous vous recommandons de générer ce document via notre module Contrats pour prévenir de futurs litiges.",
+    client: "La meilleure protection contre les impayés est un contrat client solide avec clause de paiement claire. Utilisez notre générateur de contrats pour sécuriser vos prochaines relations commerciales.",
+    fournisseur: "Assurez-vous que tous vos contrats fournisseurs contiennent des clauses de garantie, de livraison et de pénalités. Notre générateur de contrats peut vous aider à créer des contrats sécurisés.",
+    bail: "Un bail commercial bien négocié vous protège contre ce type de litige. Consultez notre module de génération de contrats pour obtenir un modèle de bail commercial adapté à votre situation.",
+    travail: "Un contrat de travail conforme au droit local est essentiel. Utilisez notre module de formation pour mieux comprendre vos obligations d'employeur et éviter les litiges futurs.",
+    fiscal: "La conformité fiscale régulière évite les redressements. Notre module d'audit vous aide à identifier et corriger les failles fiscales avant qu'elles ne deviennent des litiges."
+  };
+
+  function openMediationModal() {
+    if (!currentUser) { openModal('login'); showToast('⚠️ Connectez-vous pour soumettre un litige', 'error'); return; }
+    document.getElementById('mediationModal').classList.add('open');
+    resetMediationModal();
   }
 
-  function closeAuditModal() { document.getElementById('auditModal').classList.remove('open'); }
+  function closeMediationModal() { document.getElementById('mediationModal').classList.remove('open'); }
 
-  function resetAuditSteps() {
-    [1,2,3,4,5].forEach(i => {
-      const el = document.getElementById('auditStep'+i);
-      if(el) el.style.display = i===1 ? 'block' : 'none';
-    });
+  function resetMediationModal() {
+    selectedLitigeType = null;
+    [1,2,3].forEach(i => document.getElementById('mediationStep'+i).style.display = i===1?'block':'none');
+    document.getElementById('btnMedStep2').disabled = true;
+    document.querySelectorAll('#mediationModal .contract-type-card').forEach(c => c.classList.remove('selected'));
+    updateMediationStepUI(1);
   }
 
-  function renderAuditQuestions() {
-    [1,2,3,4].forEach(step => {
-      const container = document.getElementById('auditQ' + step);
-      if(!container) return;
-      container.innerHTML = auditData[step].map(q => `
-        <div class="audit-question">
-          <p>${q.q}</p>
-          <div class="audit-options">
-            <button class="audit-opt" id="opt-${q.id}-yes" onclick="selectAudit('${q.id}','yes')">✅ Oui</button>
-            <button class="audit-opt" id="opt-${q.id}-partial" onclick="selectAudit('${q.id}','partial')">⚠️ Partiel</button>
-            <button class="audit-opt" id="opt-${q.id}-no" onclick="selectAudit('${q.id}','no')">❌ Non</button>
-          </div>
-        </div>`).join('');
-    });
+  function selectLitigeType(type, el) {
+    selectedLitigeType = type;
+    document.querySelectorAll('#mediationModal .contract-type-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('btnMedStep2').disabled = false;
   }
 
-  function selectAudit(id, val) {
-    auditAnswers[id] = val;
-    ['yes','partial','no'].forEach(v => {
-      const el = document.getElementById(`opt-${id}-${v}`);
-      if(el) el.className = 'audit-opt' + (v === val ? ` selected-${v}` : '');
-    });
-  }
-
-  function updateAuditStepUI(step) {
-    [1,2,3,4].forEach(i => {
-      const dot = document.getElementById('adot'+i);
+  function updateMediationStepUI(step) {
+    [1,2,3].forEach(i => {
+      const dot = document.getElementById('mdot'+i);
       if(dot) dot.className = 'step-dot' + (i < step ? ' done' : i === step ? ' active' : '');
-      const line = document.getElementById('aline'+i);
+      const line = document.getElementById('mline'+i);
       if(line) line.className = 'step-line' + (i < step ? ' active' : '');
     });
   }
 
-  function auditNext(step) {
-    const unanswered = auditData[step].filter(q => !auditAnswers[q.id]);
-    if(unanswered.length > 0) { showToast('⚠️ Répondez à toutes les questions avant de continuer', 'error'); return; }
-    document.getElementById('auditStep'+step).style.display = 'none';
-    document.getElementById('auditStep'+(step+1)).style.display = 'block';
-    updateAuditStepUI(step+1);
+  function mediationNext(step) {
+    if(step === 1) {
+      if(!selectedLitigeType) { showToast('⚠️ Choisissez une catégorie', 'error'); return; }
+      document.getElementById('mediationStep1').style.display = 'none';
+      document.getElementById('mediationStep2').style.display = 'block';
+      updateMediationStepUI(2);
+      // Pre-fill company name
+      if(currentUser?.user_metadata?.company_name) {
+        document.getElementById('lit_company').value = currentUser.user_metadata.company_name;
+      }
+    } else if(step === 2) {
+      const company = document.getElementById('lit_company').value.trim();
+      const adversaire = document.getElementById('lit_adversaire').value.trim();
+      const description = document.getElementById('lit_description').value.trim();
+      if(!company || !adversaire || !description) { showToast('⚠️ Remplissez les champs obligatoires (*)', 'error'); return; }
+      document.getElementById('mediationStep2').style.display = 'none';
+      document.getElementById('mediationStep3').style.display = 'block';
+      updateMediationStepUI(3);
+      generateMediationPlan();
+    }
   }
 
-  function auditPrev(step) {
-    document.getElementById('auditStep'+step).style.display = 'none';
-    document.getElementById('auditStep'+(step-1)).style.display = 'block';
-    updateAuditStepUI(step-1);
+  function mediationPrev(step) {
+    document.getElementById('mediationStep'+step).style.display = 'none';
+    document.getElementById('mediationStep'+(step-1)).style.display = 'block';
+    updateMediationStepUI(step-1);
   }
 
-  function calculateAudit() {
-    const unanswered = auditData[4].filter(q => !auditAnswers[q.id]);
-    if(unanswered.length > 0) { showToast('⚠️ Répondez à toutes les questions', 'error'); return; }
+  function generateMediationPlan() {
+    const ref = 'LIT-' + Date.now().toString().slice(-6);
+    const company = document.getElementById('lit_company').value.trim();
+    const adversaire = document.getElementById('lit_adversaire').value.trim();
 
-    const cats = { fiscalite:[], social:[], contrats:[], numerique:[] };
-    const catNames = { fiscalite:'🧾 Fiscalité', social:'👥 Social', contrats:'📝 Contrats', numerique:'💻 Numérique' };
-    Object.values(auditData).flat().forEach(q => {
-      const ans = auditAnswers[q.id];
-      cats[q.cat].push(ans === 'yes' ? 100 : ans === 'partial' ? 50 : 0);
-    });
+    document.getElementById('litRef').textContent = 'Référence : ' + ref;
+    document.getElementById('litStatut').textContent = `${litigeLabels[selectedLitigeType]} — ${company} vs ${adversaire}`;
 
-    const catScores = {};
-    Object.keys(cats).forEach(cat => {
-      catScores[cat] = Math.round(cats[cat].reduce((a,b)=>a+b,0) / cats[cat].length);
-    });
-    const globalScore = Math.round(Object.values(catScores).reduce((a,b)=>a+b,0) / 4);
+    const plan = mediationPlans[selectedLitigeType];
+    document.getElementById('mediationPlan').innerHTML = plan.map((p, idx) => `
+      <div style="display:flex;gap:1rem;padding:0.8rem 0;border-bottom:1px solid rgba(255,255,255,0.05);align-items:flex-start;">
+        <div style="width:36px;height:36px;border-radius:50%;background:${idx===0?'rgba(201,168,76,0.2)':'rgba(255,255,255,0.05)'};border:1px solid ${idx===0?'var(--gold)':'rgba(255,255,255,0.1)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;">${p.icon}</div>
+        <div style="flex:1;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.3rem;">
+            <p style="color:${idx===0?'#fff':'rgba(255,255,255,0.6)'};font-weight:600;font-size:0.88rem;">Étape ${p.step} — ${p.title}</p>
+            <span style="font-size:0.72rem;color:var(--gold);background:rgba(201,168,76,0.1);padding:0.15rem 0.5rem;border-radius:50px;">${p.delai}</span>
+          </div>
+          <p style="color:rgba(255,255,255,0.45);font-size:0.8rem;line-height:1.5;">${p.desc}</p>
+        </div>
+      </div>`).join('');
 
-    document.getElementById('auditStep4').style.display = 'none';
-    document.getElementById('auditStep5').style.display = 'block';
-
-    const scoreColor = globalScore >= 75 ? '#5ddb8a' : globalScore >= 50 ? '#f39c12' : '#ff6b6b';
-    document.getElementById('auditScoreNum').textContent = globalScore + '%';
-    document.getElementById('auditScoreNum').style.color = scoreColor;
-    document.getElementById('auditScoreCircle').style.borderColor = scoreColor;
-    document.getElementById('auditScoreLabel').textContent =
-      globalScore >= 75 ? '✅ Bonne conformité !' : globalScore >= 50 ? '⚠️ Conformité partielle' : '🚨 Attention requise !';
-
-    document.getElementById('auditCatScores').innerHTML = Object.keys(catScores).map(cat => {
-      const s = catScores[cat];
-      const c = s >= 75 ? '#5ddb8a' : s >= 50 ? '#f39c12' : '#ff6b6b';
-      return `<div class="audit-cat-score"><p class="cat-name">${catNames[cat]}</p><p class="cat-val" style="color:${c};">${s}%</p></div>`;
-    }).join('');
-
-    const recos = [];
-    Object.values(auditData).flat().forEach(q => {
-      const ans = auditAnswers[q.id];
-      if(ans === 'no') recos.push({ text: q.q, priority: 'high' });
-      else if(ans === 'partial') recos.push({ text: q.q, priority: 'mid' });
-    });
-
-    document.getElementById('auditRecommendations').innerHTML = recos.length === 0
-      ? `<p style="color:#5ddb8a;font-size:0.85rem;">🎉 Excellent ! Aucune action requise.</p>`
-      : recos.sort((a,b)=>a.priority==='high'?-1:1).slice(0,6).map(r =>
-          `<div class="reco-item">
-            <span class="reco-priority priority-${r.priority}">${r.priority==='high'?'URGENT':'À FAIRE'}</span>
-            <span style="color:rgba(255,255,255,0.65);">${r.text}</span>
-          </div>`).join('');
-
-    saveAuditToSupabase(globalScore, catScores);
+    document.getElementById('expertRecoText').textContent = expertRecos[selectedLitigeType];
+    saveLitigeToSupabase(ref);
   }
 
-  async function saveAuditToSupabase(score, catScores) {
+  async function saveLitigeToSupabase(ref) {
     if(!currentUser) return;
     try {
-      await _supabase.from('audits').insert({
-        user_id: currentUser.id, score_global: score,
-        score_fiscalite: catScores.fiscalite, score_social: catScores.social,
-        score_contrats: catScores.contrats, score_numerique: catScores.numerique,
+      await _supabase.from('litiges').insert({
+        user_id: currentUser.id,
+        reference: ref,
+        type: selectedLitigeType,
+        company: document.getElementById('lit_company').value.trim(),
+        adversaire: document.getElementById('lit_adversaire').value.trim(),
+        description: document.getElementById('lit_description').value.trim(),
+        montant: document.getElementById('lit_montant').value || null,
+        statut: 'en_cours',
         created_at: new Date().toISOString()
       });
-      showToast('💾 Audit sauvegardé !', 'success');
-    } catch(e) { console.log('Audit save:', e.message); }
+      showToast('💾 Litige sauvegardé dans votre espace !', 'success');
+    } catch(e) { console.log('Litige save:', e.message); }
   }
 
-  function downloadAuditPDF() {
+  function downloadMediationPDF() {
     const s = document.createElement('script');
     s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
     s.onload = () => {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
       const today = new Date().toLocaleDateString('fr-FR',{year:'numeric',month:'long',day:'numeric'});
-      const score = document.getElementById('auditScoreNum').textContent;
-      const company = currentUser?.user_metadata?.company_name || 'Votre PME';
+      const company = document.getElementById('lit_company').value.trim();
+      const adversaire = document.getElementById('lit_adversaire').value.trim();
+      const description = document.getElementById('lit_description').value.trim();
+      const montant = document.getElementById('lit_montant').value;
+      const ref = document.getElementById('litRef').textContent;
 
+      // Header
       doc.setFillColor(201,168,76); doc.rect(0,0,210,8,'F');
       doc.setFillColor(10,22,40); doc.rect(0,8,210,25,'F');
       doc.setTextColor(255,255,255); doc.setFontSize(18); doc.setFont('helvetica','bold');
       doc.text('LEGAL CARE PME', 105,20,{align:'center'});
       doc.setFontSize(9); doc.setTextColor(201,168,76);
-      doc.text("Rapport d'Audit de Conformité", 105,27,{align:'center'});
+      doc.text('Plan de Médiation & Résolution de Litige', 105,27,{align:'center'});
 
       doc.setTextColor(10,22,40); doc.setFontSize(13); doc.setFont('helvetica','bold');
-      doc.text('AUDIT — ' + company.toUpperCase(), 105,48,{align:'center'});
+      doc.text('PLAN DE MÉDIATION', 105,48,{align:'center'});
       doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(120,120,120);
-      doc.text('Généré le ' + today, 105,55,{align:'center'});
+      doc.text(ref + ' — Généré le ' + today, 105,55,{align:'center'});
       doc.setDrawColor(201,168,76); doc.setLineWidth(0.5); doc.line(15,60,195,60);
 
-      let y = 72;
-      doc.setFillColor(248,244,236); doc.rect(15,y-8,180,18,'F');
-      doc.setTextColor(10,22,40); doc.setFontSize(20); doc.setFont('helvetica','bold');
-      doc.text('Score Global : ' + score, 105,y+3,{align:'center'}); y += 20;
+      let y = 70;
+      // Info litige
+      doc.setFillColor(248,244,236); doc.rect(15,y-5,180,28,'F');
+      doc.setTextColor(10,22,40); doc.setFontSize(10); doc.setFont('helvetica','bold');
+      doc.text('Catégorie : ' + litigeLabels[selectedLitigeType], 20,y+1);
+      doc.setFont('helvetica','normal'); doc.setFontSize(9);
+      doc.text('Partie A : ' + company, 20,y+8);
+      doc.text('Partie B : ' + adversaire, 20,y+14);
+      if(montant) doc.text('Montant en jeu : ' + parseInt(montant).toLocaleString('fr-FR') + ' FCFA', 20,y+20);
+      y += 35;
 
-      const catNames = {fiscalite:'Fiscalité',social:'Droit Social',contrats:'Contrats & Statuts',numerique:'Numérique'};
-      document.querySelectorAll('#auditCatScores .audit-cat-score').forEach((el,i) => {
-        const cat = Object.keys(catNames)[i];
-        const catScore = el.querySelector('.cat-val').textContent;
-        doc.setFillColor(248,244,236); doc.rect(15,y-5,180,8,'F');
-        doc.setFillColor(201,168,76); doc.rect(15,y-5,3,8,'F');
-        doc.setTextColor(10,22,40); doc.setFontSize(10); doc.setFont('helvetica','bold');
-        doc.text(catNames[cat] + ' : ' + catScore, 22,y+0.5); y += 13;
-      });
+      doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.setTextColor(10,22,40);
+      doc.text('DESCRIPTION DU LITIGE', 18,y); y += 6;
+      doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(44,62,80);
+      const descLines = doc.splitTextToSize(description, 172);
+      doc.text(descLines, 18,y); y += descLines.length * 5 + 8;
 
-      y += 5; doc.setFontSize(11); doc.setFont('helvetica','bold');
-      doc.text('RECOMMANDATIONS', 18,y); y += 8;
+      doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(10,22,40);
+      doc.text('ÉTAPES DE RÉSOLUTION RECOMMANDÉES', 18,y); y += 7;
       doc.setDrawColor(201,168,76); doc.line(18,y,192,y); y += 6;
 
-      document.querySelectorAll('#auditRecommendations .reco-item').forEach(item => {
-        const priority = item.querySelector('.reco-priority').textContent;
-        const text = item.querySelector('span:last-child').textContent;
-        doc.setFillColor(priority==='URGENT'?255:248, priority==='URGENT'?235:248, priority==='URGENT'?235:235);
-        doc.rect(18,y-4,174,10,'F');
-        doc.setTextColor(priority==='URGENT'?200:100,priority==='URGENT'?50:120,50);
-        doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.text('['+priority+']',20,y+2);
-        doc.setTextColor(44,62,80); doc.setFont('helvetica','normal');
-        const lines = doc.splitTextToSize(text,145); doc.text(lines,50,y+2);
-        y += lines.length*5+6; if(y>260){doc.addPage();y=20;}
+      mediationPlans[selectedLitigeType].forEach((p,i) => {
+        doc.setFillColor(i===0?248:255, i===0?244:255, i===0?236:255);
+        doc.rect(18,y-4,174,14,'F');
+        if(i===0) { doc.setFillColor(201,168,76); doc.rect(18,y-4,3,14,'F'); }
+        doc.setTextColor(10,22,40); doc.setFontSize(10); doc.setFont('helvetica','bold');
+        doc.text(`Étape ${p.step} — ${p.title}`, 25,y+2);
+        doc.setTextColor(100,100,100); doc.setFontSize(8); doc.setFont('helvetica','normal');
+        doc.text('Délai : ' + p.delai, 160,y+2);
+        doc.setTextColor(60,60,60);
+        const lines = doc.splitTextToSize(p.desc, 165);
+        if(lines.length > 1) {
+          doc.text(lines[0], 25,y+7);
+          y += 18;
+        } else { doc.text(lines[0], 25,y+7); y += 16; }
+        if(y > 260) { doc.addPage(); y = 20; }
       });
+
+      y += 5;
+      doc.setFillColor(248,244,236); doc.rect(15,y-4,180,20,'F');
+      doc.setTextColor(10,22,40); doc.setFontSize(9); doc.setFont('helvetica','bold');
+      doc.text('💡 Recommandation :', 20,y+2);
+      doc.setFont('helvetica','normal'); doc.setTextColor(60,60,60);
+      const recoLines = doc.splitTextToSize(expertRecos[selectedLitigeType], 165);
+      doc.text(recoLines[0], 20,y+8);
 
       doc.setFillColor(10,22,40); doc.rect(0,282,210,15,'F');
       doc.setTextColor(201,168,76); doc.setFontSize(7);
-      doc.text('Legal Care PME — Rapport confidentiel', 105,290,{align:'center'});
-      doc.save(`Audit_${company.replace(/ /g,'_')}.pdf`);
-      showToast('✅ Rapport téléchargé !', 'success');
+      doc.text('Legal Care PME — Document confidentiel de médiation', 105,290,{align:'center'});
+
+      doc.save(`Plan_Mediation_${company.replace(/ /g,'_')}_${ref}.pdf`);
+      showToast('✅ Plan PDF téléchargé !', 'success');
     };
     document.head.appendChild(s);
   }
 
-  document.getElementById('auditModal').addEventListener('click', function(e) {
-    if(e.target === this) closeAuditModal();
+  document.getElementById('mediationModal').addEventListener('click', function(e) {
+    if(e.target === this) closeMediationModal();
   });
 
   const observer = new IntersectionObserver((entries) => {
