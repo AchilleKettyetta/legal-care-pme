@@ -807,54 +807,18 @@
 
   .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,168,76,0.4); }
 
-  /* ===== FORMATION MODULE ===== */
-  .cours-card {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 14px; padding: 1rem 1.2rem;
-    cursor: pointer; transition: all 0.2s;
+  /* ===== MULTI PAYMENT ===== */
+  .pay-method-card {
     display: flex; align-items: center; gap: 1rem;
-  }
-  .cours-card:hover { background: rgba(201,168,76,0.08); border-color: rgba(201,168,76,0.3); }
-  .cours-card.completed { border-color: rgba(39,174,96,0.4); background: rgba(39,174,96,0.05); }
-  .cours-icon { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0; }
-  .cours-info { flex:1; }
-  .cours-title { color:#fff; font-weight:600; font-size:0.9rem; margin-bottom:0.2rem; }
-  .cours-meta { color:rgba(255,255,255,0.4); font-size:0.75rem; }
-  .cours-status { font-size:0.72rem; padding:0.2rem 0.6rem; border-radius:50px; font-weight:600; white-space:nowrap; }
-  .status-new { background:rgba(201,168,76,0.15); color:var(--gold); }
-  .status-done { background:rgba(39,174,96,0.15); color:#5ddb8a; }
-  .status-lock { background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.3); }
-
-  .quiz-option {
-    padding: 0.7rem 1rem; border-radius: 10px;
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.08);
-    color: rgba(255,255,255,0.7); font-size: 0.88rem;
-    cursor: pointer; transition: all 0.2s; text-align: left;
-    font-family: 'DM Sans', sans-serif; width: 100%;
+    border-radius: 14px; padding: 0.9rem 1rem;
+    cursor: pointer; transition: all 0.2s;
   }
-  .quiz-option:hover { border-color: var(--gold); color: var(--gold); }
-  .quiz-option.correct { background: rgba(39,174,96,0.15); border-color: #5ddb8a; color: #5ddb8a; }
-  .quiz-option.wrong { background: rgba(231,76,60,0.15); border-color: #ff6b6b; color: #ff6b6b; }
-  .quiz-option:disabled { cursor: not-allowed; }
-
-  .webinaire-card {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 14px; padding: 1.2rem;
-    transition: all 0.2s;
-  }
-  .webinaire-card:hover { border-color: rgba(201,168,76,0.3); }
-
-  .cert-item {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 10px; padding: 0.8rem;
-  }
-  .cert-item.done { border-color: rgba(39,174,96,0.3); background: rgba(39,174,96,0.05); }
-  .cert-item-title { color:rgba(255,255,255,0.7); font-size:0.82rem; font-weight:600; margin-bottom:0.3rem; }
-  .cert-item-status { font-size:0.75rem; }
+  .pay-method-card:hover { border-color: rgba(201,168,76,0.4); background: rgba(201,168,76,0.05); }
+  .pay-method-card.selected { border-color: var(--gold); background: rgba(201,168,76,0.08); }
+  .pay-check { color: rgba(255,255,255,0.3); font-size: 1.2rem; transition: all 0.2s; }
+  .pay-method-card.selected .pay-check { color: var(--gold); }
 
   /* ===== FILTER BUTTONS ===== */
   .filter-btn {
@@ -1458,147 +1422,208 @@
   </div>
 </div>
 
-<!-- FORMATION MODAL -->
-<div class="modal-overlay" id="formationModal">
-  <div class="modal" style="max-width:700px;width:95%;max-height:92vh;overflow-y:auto;">
-    <button class="modal-close" onclick="closeFormationModal()">✕</button>
+<!-- PAYMENT MODAL -->
+<div class="modal-overlay" id="paymentModal">
+  <div class="modal" style="max-width:480px;width:95%;max-height:92vh;overflow-y:auto;">
+    <button class="modal-close" onclick="closePaymentModal()">✕</button>
 
-    <!-- NAVIGATION TABS -->
-    <div style="display:flex;gap:0.4rem;margin-bottom:1.5rem;background:rgba(255,255,255,0.04);border-radius:12px;padding:0.3rem;" id="formationTabs">
-      <button class="modal-tab active" onclick="showFormationTab('cours', this)">🎥 Cours</button>
-      <button class="modal-tab" onclick="showFormationTab('quiz', this)">✅ Quiz</button>
-      <button class="modal-tab" onclick="showFormationTab('webinaires', this)">📅 Webinaires</button>
-      <button class="modal-tab" onclick="showFormationTab('certification', this)">🏆 Certification</button>
+    <!-- STEP 1 : CHOIX METHODE -->
+    <div id="payStep1">
+      <div style="text-align:center;margin-bottom:1.5rem;">
+        <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.4rem;margin-bottom:0.3rem;">Choisir le paiement</h2>
+        <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;">Sélectionnez votre moyen de paiement préféré</p>
+      </div>
+
+      <!-- RECAP COMMANDE -->
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1rem;margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <p style="color:rgba(255,255,255,0.5);font-size:0.75rem;">PLAN SÉLECTIONNÉ</p>
+          <p style="color:#fff;font-weight:700;font-size:1rem;" id="payPlanName">Pro PME</p>
+        </div>
+        <p style="color:var(--gold);font-weight:700;font-size:1.2rem;" id="payPlanPrice">29 000 FCFA</p>
+      </div>
+
+      <!-- METHODES -->
+      <div style="display:flex;flex-direction:column;gap:0.8rem;margin-bottom:1.5rem;">
+
+        <!-- WAVE -->
+        <div class="pay-method-card" onclick="selectPayMethod('wave', this)">
+          <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#1AA0FF,#0077CC);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">🌊</div>
+          <div style="flex:1;">
+            <p style="color:#fff;font-weight:600;font-size:0.9rem;">Wave</p>
+            <p style="color:rgba(255,255,255,0.4);font-size:0.78rem;">Sénégal · Côte d'Ivoire · Burkina · Mali</p>
+          </div>
+          <div class="pay-check" id="check-wave">○</div>
+        </div>
+
+        <!-- ORANGE MONEY -->
+        <div class="pay-method-card" onclick="selectPayMethod('orange', this)">
+          <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#FF6600,#CC4400);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">🟠</div>
+          <div style="flex:1;">
+            <p style="color:#fff;font-weight:600;font-size:0.9rem;">Orange Money</p>
+            <p style="color:rgba(255,255,255,0.4);font-size:0.78rem;">Afrique francophone · 17 pays</p>
+          </div>
+          <div class="pay-check" id="check-orange">○</div>
+        </div>
+
+        <!-- MOOV MONEY -->
+        <div class="pay-method-card" onclick="selectPayMethod('moov', this)">
+          <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#0033CC,#001F7A);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">🔵</div>
+          <div style="flex:1;">
+            <p style="color:#fff;font-weight:600;font-size:0.9rem;">Moov Money</p>
+            <p style="color:rgba(255,255,255,0.4);font-size:0.78rem;">Burkina · Bénin · Togo · Niger · Côte d'Ivoire</p>
+          </div>
+          <div class="pay-check" id="check-moov">○</div>
+        </div>
+
+        <!-- CARTE BANCAIRE -->
+        <div class="pay-method-card" onclick="selectPayMethod('card', this)">
+          <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#2ecc71,#27ae60);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">💳</div>
+          <div style="flex:1;">
+            <p style="color:#fff;font-weight:600;font-size:0.9rem;">Carte bancaire</p>
+            <p style="color:rgba(255,255,255,0.4);font-size:0.78rem;">Visa · Mastercard · International</p>
+          </div>
+          <div class="pay-check" id="check-card">○</div>
+        </div>
+
+      </div>
+
+      <button class="btn-submit" id="btnPayNext" onclick="goToPayForm()" disabled>Continuer →</button>
     </div>
 
-    <!-- TAB COURS -->
-    <div id="ftabCours">
-      <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.5rem;margin-bottom:0.3rem;">🎥 Modules de Formation</h2>
-      <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-bottom:1.5rem;">Cliquez sur un module pour commencer · Durée : 5-10 min par vidéo</p>
-
-      <div style="display:flex;flex-direction:column;gap:0.8rem;" id="coursList"></div>
-    </div>
-
-    <!-- TAB QUIZ -->
-    <div id="ftabQuiz" style="display:none;">
-      <div id="quizSelection">
-        <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.5rem;margin-bottom:0.3rem;">✅ Quiz Juridique</h2>
-        <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-bottom:1.5rem;">Testez vos connaissances et obtenez votre score</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
-          <div class="contract-type-card" onclick="startQuiz('droit_travail', this)">
-            <span style="font-size:1.5rem;">👤</span>
-            <span class="ct-name">Droit du Travail</span>
-            <span class="ct-desc">10 questions · 10 min</span>
-          </div>
-          <div class="contract-type-card" onclick="startQuiz('fiscalite', this)">
-            <span style="font-size:1.5rem;">🧾</span>
-            <span class="ct-name">Fiscalité PME</span>
-            <span class="ct-desc">10 questions · 10 min</span>
-          </div>
-          <div class="contract-type-card" onclick="startQuiz('contrats', this)">
-            <span style="font-size:1.5rem;">📝</span>
-            <span class="ct-name">Droit des Contrats</span>
-            <span class="ct-desc">10 questions · 10 min</span>
-          </div>
-          <div class="contract-type-card" onclick="startQuiz('creation', this)">
-            <span style="font-size:1.5rem;">🏢</span>
-            <span class="ct-name">Création d'entreprise</span>
-            <span class="ct-desc">10 questions · 10 min</span>
-          </div>
+    <!-- STEP 2 : FORMULAIRE MOBILE MONEY (Wave / Orange / Moov) -->
+    <div id="payStep2Mobile" style="display:none;">
+      <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1.5rem;">
+        <div id="payMethodIcon" style="width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;"></div>
+        <div>
+          <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.3rem;" id="payMethodTitle">Wave</h2>
+          <p style="color:rgba(255,255,255,0.4);font-size:0.8rem;" id="payMethodSub">Paiement Mobile Money</p>
         </div>
       </div>
 
-      <div id="quizGame" style="display:none;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
-          <h3 id="quizTitle" style="color:#fff;font-family:'Playfair Display',serif;font-size:1.2rem;"></h3>
-          <span id="quizProgress" style="color:var(--gold);font-size:0.85rem;font-weight:600;"></span>
-        </div>
-        <div style="background:rgba(255,255,255,0.05);border-radius:50px;height:4px;margin-bottom:1.5rem;">
-          <div id="quizProgressBar" style="height:100%;border-radius:50px;background:linear-gradient(90deg,var(--gold),var(--gold-light));transition:width 0.3s;"></div>
-        </div>
-        <div id="quizQuestion" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:1.2rem;margin-bottom:1rem;">
-          <p id="quizQuestionText" style="color:#fff;font-size:0.95rem;font-weight:600;line-height:1.5;"></p>
-        </div>
-        <div id="quizOptions" style="display:flex;flex-direction:column;gap:0.5rem;"></div>
-        <div id="quizFeedback" style="display:none;margin-top:1rem;padding:0.8rem;border-radius:10px;font-size:0.85rem;"></div>
-        <button id="quizNextBtn" onclick="nextQuizQuestion()" style="display:none;" class="btn-submit" style="margin-top:1rem;">Question suivante →</button>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1rem;margin-bottom:1.2rem;display:flex;justify-content:space-between;">
+        <span style="color:rgba(255,255,255,0.5);font-size:0.85rem;">Total à payer</span>
+        <span style="color:var(--gold);font-weight:700;" id="payFormAmount">29 000 FCFA</span>
       </div>
 
-      <div id="quizResults" style="display:none;text-align:center;">
-        <div style="font-size:3rem;margin-bottom:1rem;" id="quizResultEmoji">🎉</div>
-        <h3 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.5rem;margin-bottom:0.5rem;">Quiz terminé !</h3>
-        <div id="quizScoreCircle" style="width:100px;height:100px;border-radius:50%;border:4px solid var(--gold);display:flex;align-items:center;justify-content:center;margin:1rem auto;">
-          <span id="quizFinalScore" style="font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:var(--gold);"></span>
-        </div>
-        <p id="quizResultMsg" style="color:rgba(255,255,255,0.6);font-size:0.9rem;margin-bottom:1.5rem;"></p>
-        <div style="display:flex;gap:0.8rem;justify-content:center;">
-          <button class="btn-submit" onclick="retryQuiz()" style="flex:1;max-width:180px;">🔄 Réessayer</button>
-          <button class="btn-submit" onclick="backToQuizSelection()" style="flex:1;max-width:180px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);">← Autres quiz</button>
-        </div>
+      <div class="form-group" style="margin-bottom:0.8rem;">
+        <label class="form-label" id="payPhoneLabel">Numéro Wave *</label>
+        <input type="tel" class="form-input" id="payPhone" placeholder="Ex: 07 XX XX XX XX" maxlength="15">
       </div>
-    </div>
+      <div class="form-group" style="margin-bottom:1.5rem;">
+        <label class="form-label">Nom complet *</label>
+        <input type="text" class="form-input" id="payName" placeholder="Ex: Achille Kettyetta">
+      </div>
 
-    <!-- TAB WEBINAIRES -->
-    <div id="ftabWebinaires" style="display:none;">
-      <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.5rem;margin-bottom:0.3rem;">📅 Webinaires à venir</h2>
-      <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-bottom:1.5rem;">Sessions en direct avec nos experts juridiques</p>
-      <div style="display:flex;flex-direction:column;gap:1rem;">
-        <div class="webinaire-card">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-            <div>
-              <span style="background:rgba(39,174,96,0.2);color:#5ddb8a;font-size:0.72rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:50px;">GRATUIT</span>
-              <h4 style="color:#fff;font-weight:700;font-size:0.95rem;margin:0.5rem 0 0.3rem;">Comment sécuriser ses contrats commerciaux en Afrique</h4>
-              <p style="color:rgba(255,255,255,0.5);font-size:0.82rem;">📅 15 Janvier 2025 · 18h00 GMT · Durée : 1h30</p>
-              <p style="color:rgba(255,255,255,0.4);font-size:0.78rem;margin-top:0.3rem;">👨‍💼 Me. Koné Ibrahim — Avocat d'affaires</p>
-            </div>
-            <button class="module-cta-btn" style="white-space:nowrap;font-size:0.78rem;padding:0.5rem 1rem;">S'inscrire</button>
-          </div>
-        </div>
-        <div class="webinaire-card">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-            <div>
-              <span style="background:rgba(201,168,76,0.2);color:var(--gold);font-size:0.72rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:50px;">PRO</span>
-              <h4 style="color:#fff;font-weight:700;font-size:0.95rem;margin:0.5rem 0 0.3rem;">Optimisation fiscale légale pour PME africaines</h4>
-              <p style="color:rgba(255,255,255,0.5);font-size:0.82rem;">📅 22 Janvier 2025 · 17h00 GMT · Durée : 2h00</p>
-              <p style="color:rgba(255,255,255,0.4);font-size:0.78rem;margin-top:0.3rem;">👩‍💼 Dr. Fatou Diallo — Expert-comptable</p>
-            </div>
-            <button class="module-cta-btn" style="white-space:nowrap;font-size:0.78rem;padding:0.5rem 1rem;">S'inscrire</button>
-          </div>
-        </div>
-        <div class="webinaire-card">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-            <div>
-              <span style="background:rgba(39,174,96,0.2);color:#5ddb8a;font-size:0.72rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:50px;">GRATUIT</span>
-              <h4 style="color:#fff;font-weight:700;font-size:0.95rem;margin:0.5rem 0 0.3rem;">Droit du travail : obligations essentielles de l'employeur PME</h4>
-              <p style="color:rgba(255,255,255,0.5);font-size:0.82rem;">📅 29 Janvier 2025 · 18h00 GMT · Durée : 1h00</p>
-              <p style="color:rgba(255,255,255,0.4);font-size:0.78rem;margin-top:0.3rem;">👨‍💼 Me. Achille K. — Juriste d'entreprise</p>
-            </div>
-            <button class="module-cta-btn" style="white-space:nowrap;font-size:0.78rem;padding:0.5rem 1rem;">S'inscrire</button>
-          </div>
-        </div>
+      <div style="background:rgba(255,193,7,0.08);border:1px solid rgba(255,193,7,0.2);border-radius:10px;padding:0.8rem;margin-bottom:1.2rem;">
+        <p style="color:#ffc107;font-size:0.8rem;" id="payInstruction">📱 Vous allez recevoir une notification Wave pour confirmer le paiement.</p>
+      </div>
+
+      <div style="display:flex;gap:0.8rem;">
+        <button class="btn-submit" onclick="backToPayStep1()" style="flex:1;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);">← Retour</button>
+        <button class="btn-submit" onclick="processPayment()" style="flex:2;" id="btnConfirmPay">Confirmer le paiement</button>
       </div>
     </div>
 
-    <!-- TAB CERTIFICATION -->
-    <div id="ftabCertification" style="display:none;text-align:center;">
-      <div style="font-size:4rem;margin-bottom:1rem;">🏆</div>
-      <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.5rem;margin-bottom:0.5rem;">Certification PME Conforme</h2>
-      <p style="color:rgba(255,255,255,0.5);font-size:0.88rem;margin-bottom:2rem;max-width:400px;margin-left:auto;margin-right:auto;">Obtenez votre certification officielle Legal Care PME en complétant tous les modules et quiz.</p>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem;text-align:left;" id="certProgress"></div>
-
-      <div id="certDownloadSection" style="display:none;">
-        <div style="background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;">
-          <p style="color:var(--gold);font-weight:700;font-size:1rem;margin-bottom:0.3rem;">🎉 Félicitations !</p>
-          <p style="color:rgba(255,255,255,0.6);font-size:0.85rem;">Vous avez complété tous les modules. Téléchargez votre certificat !</p>
+    <!-- STEP 2 : FORMULAIRE CARTE BANCAIRE -->
+    <div id="payStep2Card" style="display:none;">
+      <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1.5rem;">
+        <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#2ecc71,#27ae60);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">💳</div>
+        <div>
+          <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.3rem;">Carte bancaire</h2>
+          <p style="color:rgba(255,255,255,0.4);font-size:0.8rem;">Visa · Mastercard</p>
         </div>
-        <button class="btn-submit" onclick="downloadCertificate()">⬇️ Télécharger mon certificat PDF</button>
       </div>
 
-      <div id="certIncomplete">
-        <p style="color:rgba(255,255,255,0.4);font-size:0.85rem;margin-bottom:1rem;">Complétez tous les modules pour débloquer votre certificat</p>
-        <button class="btn-submit" onclick="showFormationTab('cours', null)" style="max-width:250px;margin:0 auto;">📚 Continuer la formation →</button>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1rem;margin-bottom:1.2rem;display:flex;justify-content:space-between;">
+        <span style="color:rgba(255,255,255,0.5);font-size:0.85rem;">Total à payer</span>
+        <span style="color:var(--gold);font-weight:700;" id="payCardAmount">29 000 FCFA</span>
       </div>
+
+      <div class="form-group" style="margin-bottom:0.8rem;">
+        <label class="form-label">Numéro de carte *</label>
+        <input type="text" class="form-input" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCardNumber(this)">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:0.8rem;">
+        <div class="form-group">
+          <label class="form-label">Date d'expiration *</label>
+          <input type="text" class="form-input" id="cardExpiry" placeholder="MM/AA" maxlength="5" oninput="formatExpiry(this)">
+        </div>
+        <div class="form-group">
+          <label class="form-label">CVV *</label>
+          <input type="text" class="form-input" id="cardCvv" placeholder="123" maxlength="3">
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:1.5rem;">
+        <label class="form-label">Nom sur la carte *</label>
+        <input type="text" class="form-input" id="cardName" placeholder="Ex: ACHILLE KETTYETTA">
+      </div>
+
+      <div style="background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.2);border-radius:10px;padding:0.8rem;margin-bottom:1.2rem;display:flex;align-items:center;gap:0.5rem;">
+        <span>🔒</span>
+        <p style="color:#5ddb8a;font-size:0.78rem;">Paiement sécurisé SSL · Vos données sont cryptées</p>
+      </div>
+
+      <div style="display:flex;gap:0.8rem;">
+        <button class="btn-submit" onclick="backToPayStep1()" style="flex:1;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);">← Retour</button>
+        <button class="btn-submit" onclick="processCardPayment()" style="flex:2;">💳 Payer maintenant</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 : CONFIRMATION -->
+    <div id="payStep3" style="display:none;text-align:center;">
+      <div style="width:80px;height:80px;border-radius:50%;background:rgba(39,174,96,0.15);border:3px solid #5ddb8a;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:2.5rem;">✅</div>
+      <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.5rem;margin-bottom:0.5rem;">Paiement confirmé !</h2>
+      <p style="color:rgba(255,255,255,0.5);font-size:0.88rem;margin-bottom:1.5rem;" id="payConfirmMsg">Votre abonnement est activé.</p>
+
+      <div style="background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.25);border-radius:14px;padding:1.2rem;margin-bottom:1.5rem;text-align:left;">
+        <p style="color:rgba(255,255,255,0.5);font-size:0.75rem;font-weight:600;margin-bottom:0.8rem;">DÉTAILS DU PAIEMENT</p>
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+          <span style="color:rgba(255,255,255,0.5);font-size:0.82rem;">Référence</span>
+          <span style="color:#fff;font-size:0.82rem;font-weight:600;" id="payRef">PAY-000000</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+          <span style="color:rgba(255,255,255,0.5);font-size:0.82rem;">Plan activé</span>
+          <span style="color:var(--gold);font-size:0.82rem;font-weight:600;" id="payConfirmPlan">Pro PME</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+          <span style="color:rgba(255,255,255,0.5);font-size:0.82rem;">Méthode</span>
+          <span style="color:#fff;font-size:0.82rem;" id="payConfirmMethod">Wave</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+          <span style="color:rgba(255,255,255,0.5);font-size:0.82rem;">Montant</span>
+          <span style="color:#5ddb8a;font-size:0.82rem;font-weight:600;" id="payConfirmAmount">29 000 FCFA</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span style="color:rgba(255,255,255,0.5);font-size:0.82rem;">Valide jusqu'au</span>
+          <span style="color:#fff;font-size:0.82rem;" id="payExpiry"></span>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:0.8rem;">
+        <button class="btn-submit" onclick="downloadRecu()" style="flex:2;">⬇️ Télécharger le reçu PDF</button>
+        <button class="btn-submit" onclick="closePaymentModal()" style="flex:1;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);">Fermer</button>
+      </div>
+    </div>
+
+    <!-- STEP ENTREPRISE -->
+    <div id="payStepEntreprise" style="display:none;text-align:center;">
+      <div style="font-size:3rem;margin-bottom:1rem;">📞</div>
+      <h2 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.4rem;margin-bottom:0.5rem;">Plan Entreprise</h2>
+      <p style="color:rgba(255,255,255,0.5);font-size:0.88rem;margin-bottom:1.5rem;">Notre équipe vous contacte pour un devis personnalisé sous 24h</p>
+      <div class="form-group" style="text-align:left;margin-bottom:0.8rem;">
+        <label class="form-label">Votre nom *</label>
+        <input type="text" class="form-input" id="entNom" placeholder="Ex: Achille Kettyetta">
+      </div>
+      <div class="form-group" style="text-align:left;margin-bottom:0.8rem;">
+        <label class="form-label">Votre entreprise *</label>
+        <input type="text" class="form-input" id="entCompany" placeholder="Ex: SARL Diallo & Fils">
+      </div>
+      <div class="form-group" style="text-align:left;margin-bottom:1.5rem;">
+        <label class="form-label">Votre WhatsApp *</label>
+        <input type="tel" class="form-input" id="entPhone" placeholder="Ex: +226 XX XX XX XX">
+      </div>
+      <button class="btn-submit" onclick="submitEntrepriseContact()">Envoyer ma demande →</button>
     </div>
 
   </div>
@@ -1688,7 +1713,7 @@
         <li>Support prioritaire</li>
         <li>Certification PME</li>
       </ul>
-      <button class="pricing-btn filled" onclick="openModal('register')">S'abonner maintenant</button>
+      <button class="pricing-btn filled" onclick="openPaymentModal('pro', 29000)">💳 Payer maintenant</button>
     </div>
 
     <div class="pricing-card">
@@ -1703,7 +1728,7 @@
         <li>Rapports analytics</li>
         <li>Formation équipe sur site</li>
       </ul>
-      <button class="pricing-btn outline">Nous contacter</button>
+      <button class="pricing-btn outline" onclick="openPaymentModal('entreprise', 0)">📞 Nous contacter</button>
     </div>
   </div>
 </section>
@@ -2383,298 +2408,227 @@
     if (e.target === this) closeContractModal();
   });
 
-  // ===== FORMATION MODULE =====
-  const coursData = [
-    { id:'c1', icon:'⚖️', title:'Introduction au droit des affaires en Afrique', meta:'Module 1 · 8 min · Débutant', color:'rgba(201,168,76,0.2)', status:'new' },
-    { id:'c2', icon:'📝', title:'Rédiger un contrat commercial solide', meta:'Module 2 · 10 min · Débutant', color:'rgba(41,128,185,0.2)', status:'new' },
-    { id:'c3', icon:'👤', title:'Les obligations de l\'employeur PME', meta:'Module 3 · 12 min · Intermédiaire', color:'rgba(155,89,182,0.2)', status:'new' },
-    { id:'c4', icon:'🧾', title:'Fiscalité des PME : ce qu\'il faut savoir', meta:'Module 4 · 10 min · Intermédiaire', color:'rgba(39,174,96,0.2)', status:'new' },
-    { id:'c5', icon:'🏢', title:'Créer et structurer son entreprise légalement', meta:'Module 5 · 15 min · Avancé', color:'rgba(230,126,34,0.2)', status:'new' },
-    { id:'c6', icon:'🔒', title:'Protection des données et numérique', meta:'Module 6 · 8 min · Avancé', color:'rgba(231,76,60,0.2)', status:'new' },
-  ];
+  // ===== MULTI PAYMENT MODULE =====
+  let currentPlan = null;
+  let currentAmount = 0;
+  let currentMethod = null;
 
-  const quizData = {
-    droit_travail: {
-      title: '👤 Droit du Travail',
-      questions: [
-        { q:"Quel document est obligatoire pour tout employé ?", opts:["Fiche de paie","Contrat de travail écrit","Attestation médicale","Carte d'identité"], answer:1 },
-        { q:"Le SMIG correspond à :", opts:["Salaire Maximum Imposable","Salaire Minimum Interprofessionnel Garanti","Salaire Moyen d'une Industrie en Groupe","Aucune de ces réponses"], answer:1 },
-        { q:"Le préavis de licenciement doit être :", opts:["Verbal","Écrit et notifié","Optionnel","Par SMS"], answer:1 },
-        { q:"Les cotisations sociales sont payées :", opts:["Annuellement","Mensuellement","Trimestriellement","Jamais"], answer:1 },
-        { q:"Un CDD peut être renouvelé :", opts:["Indéfiniment","Une seule fois","Selon la loi locale","Jamais"], answer:2 },
-        { q:"Le registre du personnel doit contenir :", opts:["Les salaires uniquement","L'identité et les dates d'entrée/sortie","Les performances","Les opinions politiques"], answer:1 },
-        { q:"En cas de licenciement abusif, l'employé peut :", opts:["Rien faire","Saisir le tribunal du travail","Appeler la police","Ignorer"], answer:1 },
-        { q:"Les heures supplémentaires doivent être :", opts:["Ignorées","Compensées ou payées majorées","Bénévoles","Obligatoires sans compensation"], answer:1 },
-        { q:"La période d'essai doit être :", opts:["Indéfinie","Définie dans le contrat","Toujours de 3 mois","Optionnelle"], answer:1 },
-        { q:"Le congé annuel est :", opts:["Un droit optionnel","Un droit légal pour tout employé","Réservé aux cadres","À la discrétion du patron"], answer:1 },
-      ]
-    },
-    fiscalite: {
-      title: '🧾 Fiscalité PME',
-      questions: [
-        { q:"La TVA signifie :", opts:["Taxe sur la Valeur Ajoutée","Taxe sur les Ventes Annuelles","Taxe sur le Volume d'Affaires","Total des Versements Annuels"], answer:0 },
-        { q:"L'impôt sur les bénéfices est calculé sur :", opts:["Le chiffre d'affaires brut","Les bénéfices nets","Les salaires","Le capital social"], answer:1 },
-        { q:"Les documents comptables doivent être conservés pendant :", opts:["3 ans","5 ans","10 ans","1 an"], answer:2 },
-        { q:"Une facture doit obligatoirement contenir :", opts:["Uniquement le montant","Le numéro, date, parties, objet et montant","Juste le nom du client","Le numéro de téléphone"], answer:1 },
-        { q:"Le régime du réel simplifié convient aux :", opts:["Grandes entreprises","PME avec CA modéré","Auto-entrepreneurs uniquement","Associations"], answer:1 },
-        { q:"La déclaration fiscale annuelle est :", opts:["Optionnelle","Obligatoire pour toute entreprise","Réservée aux grandes entreprises","Mensuelle seulement"], answer:1 },
-        { q:"Une pénalité fiscale peut être évitée en :", opts:["Payant en retard","Déclarant et payant dans les délais","Ne déclarant pas","Ignorant les avis"], answer:1 },
-        { q:"L'amortissement permet de :", opts:["Augmenter les bénéfices","Réduire la base imposable","Éviter toutes taxes","Créer des dettes"], answer:1 },
-        { q:"Un redressement fiscal survient quand :", opts:["Vous payez trop","L'administration détecte des erreurs ou omissions","Vous changez de comptable","Vous déménagez"], answer:1 },
-        { q:"La comptabilité doit être tenue :", opts:["Par le dirigeant uniquement","Par un professionnel ou logiciel agréé","Manuellement sur papier","Par l'État"], answer:1 },
-      ]
-    },
-    contrats: {
-      title: '📝 Droit des Contrats',
-      questions: [
-        { q:"Un contrat est valide si :", opts:["Il est verbal uniquement","Il y a consentement, objet et cause licites","Il est signé par un notaire uniquement","Il est en anglais"], answer:1 },
-        { q:"Une clause pénale dans un contrat sert à :", opts:["Punir le tribunal","Fixer les pénalités en cas de non-respect","Résilier automatiquement","Rien"], answer:1 },
-        { q:"Le délai de prescription d'un contrat commercial est généralement de :", opts:["1 an","5 ans","10 ans","30 ans"], answer:1 },
-        { q:"Un NDA (accord de confidentialité) protège :", opts:["Les bénéfices","Les informations confidentielles","Le personnel","Les locaux"], answer:1 },
-        { q:"En cas de rupture de contrat, la partie lésée peut :", opts:["Rien faire","Demander des dommages et intérêts","Appeler la police uniquement","Ignorer"], answer:1 },
-        { q:"La force majeure permet de :", opts:["Rompre tout contrat à volonté","S'exonérer d'obligations en cas d'événement imprévisible","Réduire les prix","Prolonger indéfiniment"], answer:1 },
-        { q:"Un contrat signé électroniquement est :", opts:["Non valide","Valide selon la législation locale","Toujours invalide en Afrique","Optionnel"], answer:1 },
-        { q:"La clause de résiliation permet :", opts:["De modifier le prix","De mettre fin au contrat sous conditions","D'augmenter la durée","De changer les parties"], answer:1 },
-        { q:"Un contrat de prestation doit préciser :", opts:["Uniquement le prix","L'objet, le prix, les délais et les obligations","Juste les noms","La couleur du logo"], answer:1 },
-        { q:"La médiation contractuelle est :", opts:["Obligatoire par la loi","Une résolution amiable avant tout recours judiciaire","Plus coûteuse que le tribunal","Inefficace"], answer:1 },
-      ]
-    },
-    creation: {
-      title: '🏢 Création d\'entreprise',
-      questions: [
-        { q:"Une SARL signifie :", opts:["Société Anonyme à Responsabilité Libre","Société À Responsabilité Limitée","Société Anonyme Régionale Locale","Société Artisanale Reconnue Légalement"], answer:1 },
-        { q:"Le capital social minimum d'une SARL varie selon :", opts:["L'âge du dirigeant","La législation du pays","Le secteur d'activité uniquement","Le nombre d'employés"], answer:1 },
-        { q:"Les statuts d'entreprise doivent être :", opts:["Écrits et déposés au greffe","Verbaux","Secrets","Optionnels"], answer:0 },
-        { q:"Un numéro RCCM correspond à :", opts:["Registre du Commerce et du Crédit Mobilier","Registre Central des Comptes et Marchés","Rapport Commercial Certifié Mensuel","Rien de spécifique"], answer:0 },
-        { q:"L'objet social d'une entreprise définit :", opts:["Son adresse","Son activité principale autorisée","Son capital","Son logo"], answer:1 },
-        { q:"Les associés d'une SARL sont responsables :", opts:["Illimitément sur leurs biens personnels","À hauteur de leurs apports uniquement","Pas du tout","Selon leur humeur"], answer:1 },
-        { q:"La domiciliation d'une entreprise correspond à :", opts:["L'adresse du dirigeant","L'adresse officielle du siège social","L'adresse du comptable","L'adresse de la banque"], answer:1 },
-        { q:"Un bilan comptable doit être établi :", opts:["Quand on veut","Annuellement","Tous les 5 ans","Jamais"], answer:1 },
-        { q:"Le procès-verbal d'Assemblée Générale sert à :", opts:["Punir les associés","Formaliser les décisions collectives","Informer l'État uniquement","Augmenter le capital"], answer:1 },
-        { q:"La dissolution d'une entreprise nécessite :", opts:["Un simple courriel","Une décision formelle et des formalités légales","Rien de spécial","L'accord de la banque uniquement"], answer:1 },
-      ]
-    }
+  const methodConfig = {
+    wave:   { icon:'🌊', bg:'linear-gradient(135deg,#1AA0FF,#0077CC)', title:'Wave', sub:'Paiement Mobile Money Wave', phoneLabel:'Numéro Wave *', instruction:'📱 Vous allez recevoir une notification Wave pour confirmer.' },
+    orange: { icon:'🟠', bg:'linear-gradient(135deg,#FF6600,#CC4400)', title:'Orange Money', sub:'Paiement Mobile Money Orange', phoneLabel:'Numéro Orange Money *', instruction:'📱 Composez #144# pour confirmer le paiement Orange Money.' },
+    moov:   { icon:'🔵', bg:'linear-gradient(135deg,#0033CC,#001F7A)', title:'Moov Money', sub:'Paiement Mobile Money Moov', phoneLabel:'Numéro Moov Money *', instruction:'📱 Vous allez recevoir un SMS Moov Money pour valider.' },
   };
 
-  let completedCours = new Set();
-  let completedQuiz = new Set();
-  let currentQuiz = null;
-  let currentQuestionIndex = 0;
-  let quizScore = 0;
-  let questionAnswered = false;
+  function openPaymentModal(plan, amount) {
+    if(!currentUser && plan !== 'entreprise') {
+      openModal('login');
+      showToast('⚠️ Connectez-vous pour souscrire un abonnement', 'error');
+      return;
+    }
+    currentPlan = plan;
+    currentAmount = amount;
+    currentMethod = null;
 
-  function openFormationModal() {
-    if (!currentUser) { openModal('login'); showToast('⚠️ Connectez-vous pour accéder à la formation', 'error'); return; }
-    document.getElementById('formationModal').classList.add('open');
-    renderCours();
-    renderCertProgress();
-  }
-
-  function closeFormationModal() { document.getElementById('formationModal').classList.remove('open'); }
-
-  function showFormationTab(tab, btn) {
-    ['Cours','Quiz','Webinaires','Certification'].forEach(t => {
-      document.getElementById('ftab'+t).style.display = 'none';
+    // Reset all steps
+    ['payStep1','payStep2Mobile','payStep2Card','payStep3','payStepEntreprise'].forEach(id => {
+      document.getElementById(id).style.display = 'none';
     });
-    document.getElementById('ftab' + tab.charAt(0).toUpperCase() + tab.slice(1)).style.display = 'block';
-    document.querySelectorAll('#formationTabs .modal-tab').forEach(b => b.classList.remove('active'));
-    if(btn) btn.classList.add('active');
-    if(tab === 'certification') renderCertProgress();
-  }
+    document.querySelectorAll('.pay-method-card').forEach(c => c.classList.remove('selected'));
+    ['wave','orange','moov','card'].forEach(m => { document.getElementById('check-'+m).textContent = '○'; });
+    document.getElementById('btnPayNext').disabled = true;
 
-  function renderCours() {
-    document.getElementById('coursList').innerHTML = coursData.map(c => {
-      const done = completedCours.has(c.id);
-      return `<div class="cours-card ${done?'completed':''}" onclick="playCours('${c.id}')">
-        <div class="cours-icon" style="background:${c.color};">${c.icon}</div>
-        <div class="cours-info">
-          <p class="cours-title">${c.title}</p>
-          <p class="cours-meta">${c.meta}</p>
-        </div>
-        <span class="cours-status ${done?'status-done':'status-new'}">${done?'✅ Terminé':'▶️ Commencer'}</span>
-      </div>`;
-    }).join('');
-  }
-
-  function playCours(id) {
-    const cours = coursData.find(c => c.id === id);
-    if(!cours) return;
-    completedCours.add(id);
-    renderCours();
-    renderCertProgress();
-    showToast(`▶️ "${cours.title}" — Module marqué comme complété !`, 'success');
-  }
-
-  // QUIZ
-  function startQuiz(type, el) {
-    currentQuiz = type;
-    currentQuestionIndex = 0;
-    quizScore = 0;
-    questionAnswered = false;
-    document.getElementById('quizSelection').style.display = 'none';
-    document.getElementById('quizResults').style.display = 'none';
-    document.getElementById('quizGame').style.display = 'block';
-    document.getElementById('quizTitle').textContent = quizData[type].title;
-    renderQuizQuestion();
-  }
-
-  function renderQuizQuestion() {
-    const q = quizData[currentQuiz].questions[currentQuestionIndex];
-    const total = quizData[currentQuiz].questions.length;
-    questionAnswered = false;
-
-    document.getElementById('quizProgress').textContent = `${currentQuestionIndex+1} / ${total}`;
-    document.getElementById('quizProgressBar').style.width = ((currentQuestionIndex+1)/total*100) + '%';
-    document.getElementById('quizQuestionText').textContent = q.q;
-    document.getElementById('quizFeedback').style.display = 'none';
-    document.getElementById('quizNextBtn').style.display = 'none';
-
-    document.getElementById('quizOptions').innerHTML = q.opts.map((opt, i) =>
-      `<button class="quiz-option" onclick="answerQuiz(${i})">${opt}</button>`
-    ).join('');
-  }
-
-  function answerQuiz(selected) {
-    if(questionAnswered) return;
-    questionAnswered = true;
-    const q = quizData[currentQuiz].questions[currentQuestionIndex];
-    const opts = document.querySelectorAll('.quiz-option');
-    opts.forEach(o => o.disabled = true);
-
-    if(selected === q.answer) {
-      quizScore++;
-      opts[selected].className = 'quiz-option correct';
-      const fb = document.getElementById('quizFeedback');
-      fb.style.display = 'block';
-      fb.style.background = 'rgba(39,174,96,0.1)';
-      fb.style.border = '1px solid rgba(39,174,96,0.3)';
-      fb.style.color = '#5ddb8a';
-      fb.textContent = '✅ Bonne réponse !';
+    if(plan === 'entreprise') {
+      document.getElementById('payStepEntreprise').style.display = 'block';
+      if(currentUser?.user_metadata?.company_name) document.getElementById('entCompany').value = currentUser.user_metadata.company_name || '';
     } else {
-      opts[selected].className = 'quiz-option wrong';
-      opts[q.answer].className = 'quiz-option correct';
-      const fb = document.getElementById('quizFeedback');
-      fb.style.display = 'block';
-      fb.style.background = 'rgba(231,76,60,0.1)';
-      fb.style.border = '1px solid rgba(231,76,60,0.3)';
-      fb.style.color = '#ff6b6b';
-      fb.textContent = `❌ Mauvaise réponse. La bonne réponse était : "${quizData[currentQuiz].questions[currentQuestionIndex].opts[q.answer]}"`;
+      document.getElementById('payStep1').style.display = 'block';
+      document.getElementById('payPlanName').textContent = plan === 'pro' ? 'Plan Pro PME' : 'Plan ' + plan;
+      document.getElementById('payPlanPrice').textContent = amount.toLocaleString('fr-FR') + ' FCFA';
     }
-    document.getElementById('quizNextBtn').style.display = 'block';
+
+    document.getElementById('paymentModal').classList.add('open');
   }
 
-  function nextQuizQuestion() {
-    currentQuestionIndex++;
-    if(currentQuestionIndex < quizData[currentQuiz].questions.length) {
-      renderQuizQuestion();
+  function closePaymentModal() { document.getElementById('paymentModal').classList.remove('open'); }
+
+  function selectPayMethod(method, el) {
+    currentMethod = method;
+    document.querySelectorAll('.pay-method-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    ['wave','orange','moov','card'].forEach(m => { document.getElementById('check-'+m).textContent = m === method ? '✓' : '○'; });
+    document.getElementById('btnPayNext').disabled = false;
+  }
+
+  function goToPayForm() {
+    if(!currentMethod) return;
+    document.getElementById('payStep1').style.display = 'none';
+    if(currentMethod === 'card') {
+      document.getElementById('payStep2Card').style.display = 'block';
+      document.getElementById('payCardAmount').textContent = currentAmount.toLocaleString('fr-FR') + ' FCFA';
+      if(currentUser?.user_metadata) document.getElementById('cardName').value = (currentUser.user_metadata.full_name || '').toUpperCase();
     } else {
-      showQuizResults();
+      const cfg = methodConfig[currentMethod];
+      document.getElementById('payMethodIcon').style.background = cfg.bg;
+      document.getElementById('payMethodIcon').textContent = cfg.icon;
+      document.getElementById('payMethodTitle').textContent = cfg.title;
+      document.getElementById('payMethodSub').textContent = cfg.sub;
+      document.getElementById('payPhoneLabel').textContent = cfg.phoneLabel;
+      document.getElementById('payInstruction').textContent = cfg.instruction;
+      document.getElementById('payFormAmount').textContent = currentAmount.toLocaleString('fr-FR') + ' FCFA';
+      if(currentUser?.user_metadata?.full_name) document.getElementById('payName').value = currentUser.user_metadata.full_name || '';
+      document.getElementById('payStep2Mobile').style.display = 'block';
     }
   }
 
-  function showQuizResults() {
-    const total = quizData[currentQuiz].questions.length;
-    const pct = Math.round(quizScore/total*100);
-    document.getElementById('quizGame').style.display = 'none';
-    document.getElementById('quizResults').style.display = 'block';
-    document.getElementById('quizFinalScore').textContent = pct + '%';
-    document.getElementById('quizResultEmoji').textContent = pct >= 80 ? '🏆' : pct >= 60 ? '👍' : '📚';
-    document.getElementById('quizResultMsg').textContent =
-      pct >= 80 ? `Excellent ! ${quizScore}/${total} bonnes réponses. Quiz validé !` :
-      pct >= 60 ? `Bien ! ${quizScore}/${total} bonnes réponses. Encore un effort !` :
-      `${quizScore}/${total} bonnes réponses. Révisez et réessayez !`;
-    if(pct >= 60) { completedQuiz.add(currentQuiz); renderCertProgress(); }
+  function backToPayStep1() {
+    document.getElementById('payStep2Mobile').style.display = 'none';
+    document.getElementById('payStep2Card').style.display = 'none';
+    document.getElementById('payStep1').style.display = 'block';
   }
 
-  function retryQuiz() {
-    startQuiz(currentQuiz, null);
+  function processPayment() {
+    const phone = document.getElementById('payPhone').value.trim();
+    const name = document.getElementById('payName').value.trim();
+    if(!phone || !name) { showToast('⚠️ Remplissez tous les champs', 'error'); return; }
+    if(phone.replace(/\s/g,'').length < 8) { showToast('⚠️ Numéro invalide', 'error'); return; }
+
+    const btn = document.getElementById('btnConfirmPay');
+    btn.textContent = '⏳ Traitement en cours...';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      showConfirmation(name, methodConfig[currentMethod]?.title || currentMethod);
+      btn.textContent = 'Confirmer le paiement';
+      btn.disabled = false;
+    }, 2500);
   }
 
-  function backToQuizSelection() {
-    document.getElementById('quizGame').style.display = 'none';
-    document.getElementById('quizResults').style.display = 'none';
-    document.getElementById('quizSelection').style.display = 'block';
+  function processCardPayment() {
+    const num = document.getElementById('cardNumber').value.trim();
+    const expiry = document.getElementById('cardExpiry').value.trim();
+    const cvv = document.getElementById('cardCvv').value.trim();
+    const name = document.getElementById('cardName').value.trim();
+    if(!num || !expiry || !cvv || !name) { showToast('⚠️ Remplissez tous les champs', 'error'); return; }
+    if(num.replace(/\s/g,'').length < 16) { showToast('⚠️ Numéro de carte invalide', 'error'); return; }
+
+    const btn = document.querySelector('#payStep2Card .btn-submit:last-child');
+    btn.textContent = '⏳ Vérification en cours...';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      showConfirmation(name, '💳 Carte bancaire');
+      btn.textContent = '💳 Payer maintenant';
+      btn.disabled = false;
+    }, 3000);
   }
 
-  // CERTIFICATION
-  function renderCertProgress() {
-    const items = [
-      { id:'cours', label:'📚 6 modules complétés', done: completedCours.size >= 6 },
-      { id:'q1', label:'✅ Quiz Droit du Travail', done: completedQuiz.has('droit_travail') },
-      { id:'q2', label:'✅ Quiz Fiscalité PME', done: completedQuiz.has('fiscalite') },
-      { id:'q3', label:'✅ Quiz Droit des Contrats', done: completedQuiz.has('contrats') },
-      { id:'q4', label:'✅ Quiz Création d\'entreprise', done: completedQuiz.has('creation') },
-      { id:'audit', label:'🛡️ Audit réalisé', done: completedCours.size > 0 },
-    ];
+  function showConfirmation(name, methodLabel) {
+    const ref = 'PAY-' + Date.now().toString().slice(-6);
+    const expiry = new Date();
+    expiry.setMonth(expiry.getMonth() + 1);
 
-    document.getElementById('certProgress').innerHTML = items.map(item => `
-      <div class="cert-item ${item.done?'done':''}">
-        <p class="cert-item-title">${item.label}</p>
-        <span class="cert-item-status" style="color:${item.done?'#5ddb8a':'rgba(255,255,255,0.3)'};">${item.done?'✅ Complété':'⏳ En cours'}</span>
-      </div>`).join('');
+    ['payStep2Mobile','payStep2Card'].forEach(id => { document.getElementById(id).style.display = 'none'; });
+    document.getElementById('payStep3').style.display = 'block';
 
-    const allDone = items.every(i => i.done);
-    document.getElementById('certDownloadSection').style.display = allDone ? 'block' : 'none';
-    document.getElementById('certIncomplete').style.display = allDone ? 'none' : 'block';
+    document.getElementById('payRef').textContent = ref;
+    document.getElementById('payConfirmPlan').textContent = currentPlan === 'pro' ? 'Pro PME' : currentPlan;
+    document.getElementById('payConfirmMethod').textContent = methodLabel;
+    document.getElementById('payConfirmAmount').textContent = currentAmount.toLocaleString('fr-FR') + ' FCFA';
+    document.getElementById('payExpiry').textContent = expiry.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+    document.getElementById('payConfirmMsg').textContent = `Abonnement ${currentPlan === 'pro' ? 'Pro PME' : currentPlan} activé pour ${name} !`;
+
+    savePayment(ref, methodLabel);
+    showToast('🎉 Paiement confirmé avec succès !', 'success');
   }
 
-  function downloadCertificate() {
+  async function savePayment(ref, method) {
+    if(!currentUser) return;
+    try {
+      await _supabase.from('payments').insert({
+        user_id: currentUser.id, reference: ref,
+        plan: currentPlan, amount: currentAmount,
+        method: method, statut: 'confirme',
+        created_at: new Date().toISOString()
+      });
+    } catch(e) { console.log('Payment:', e.message); }
+  }
+
+  function formatCardNumber(input) {
+    let v = input.value.replace(/\D/g,'').substring(0,16);
+    input.value = v.replace(/(.{4})/g,'$1 ').trim();
+  }
+
+  function formatExpiry(input) {
+    let v = input.value.replace(/\D/g,'').substring(0,4);
+    if(v.length >= 2) v = v.substring(0,2) + '/' + v.substring(2);
+    input.value = v;
+  }
+
+  function submitEntrepriseContact() {
+    const nom = document.getElementById('entNom').value.trim();
+    const company = document.getElementById('entCompany').value.trim();
+    const phone = document.getElementById('entPhone').value.trim();
+    if(!nom || !company || !phone) { showToast('⚠️ Remplissez tous les champs', 'error'); return; }
+    showToast('✅ Demande envoyée ! Nous vous contacterons sous 24h 😊', 'success');
+    closePaymentModal();
+  }
+
+  function downloadRecu() {
     const s = document.createElement('script');
     s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
     s.onload = () => {
       const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+      const doc = new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
       const today = new Date().toLocaleDateString('fr-FR',{year:'numeric',month:'long',day:'numeric'});
+      const ref = document.getElementById('payRef').textContent;
+      const plan = document.getElementById('payConfirmPlan').textContent;
+      const amount = document.getElementById('payConfirmAmount').textContent;
+      const method = document.getElementById('payConfirmMethod').textContent;
+      const expiry = document.getElementById('payExpiry').textContent;
       const company = currentUser?.user_metadata?.company_name || 'Votre PME';
 
-      // Background
-      doc.setFillColor(10,22,40); doc.rect(0,0,297,210,'F');
-      doc.setFillColor(201,168,76); doc.rect(0,0,297,8,'F');
-      doc.setFillColor(201,168,76); doc.rect(0,202,297,8,'F');
-      doc.setDrawColor(201,168,76); doc.setLineWidth(0.3);
-      doc.rect(12,12,273,186);
+      doc.setFillColor(10,22,40); doc.rect(0,0,210,40,'F');
+      doc.setFillColor(201,168,76); doc.rect(0,0,210,6,'F');
+      doc.setTextColor(255,255,255); doc.setFontSize(20); doc.setFont('helvetica','bold');
+      doc.text('LEGAL CARE PME', 105,20,{align:'center'});
+      doc.setFontSize(9); doc.setTextColor(201,168,76);
+      doc.text('Reçu de Paiement Officiel', 105,30,{align:'center'});
 
-      // Title
-      doc.setTextColor(201,168,76); doc.setFontSize(11); doc.setFont('helvetica','normal');
-      doc.text('LEGAL CARE PME', 148.5,30,{align:'center'});
-      doc.setFontSize(28); doc.setFont('helvetica','bold'); doc.setTextColor(255,255,255);
-      doc.text('CERTIFICAT DE CONFORMITÉ', 148.5,55,{align:'center'});
-      doc.setFontSize(11); doc.setFont('helvetica','normal'); doc.setTextColor(201,168,76);
-      doc.text('PME LÉGALEMENT CONFORME', 148.5,66,{align:'center'});
+      doc.setFillColor(39,174,96); doc.circle(105,58,10,'F');
+      doc.setTextColor(255,255,255); doc.setFontSize(14); doc.setFont('helvetica','bold');
+      doc.text('✓', 105,62,{align:'center'});
 
-      // Gold line
-      doc.setDrawColor(201,168,76); doc.setLineWidth(1);
-      doc.line(50,72,247,72);
+      doc.setTextColor(10,22,40); doc.setFontSize(16); doc.setFont('helvetica','bold');
+      doc.text('Paiement confirmé !', 105,78,{align:'center'});
+      doc.setFontSize(22); doc.setTextColor(39,174,96);
+      doc.text(amount, 105,90,{align:'center'});
 
-      // Content
-      doc.setTextColor(255,255,255); doc.setFontSize(12); doc.setFont('helvetica','normal');
-      doc.text('Ce certificat est décerné à', 148.5,85,{align:'center'});
-      doc.setFontSize(22); doc.setFont('helvetica','bold'); doc.setTextColor(201,168,76);
-      doc.text(company, 148.5,100,{align:'center'});
-      doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(200,200,200);
-      doc.text('Pour avoir complété avec succès le programme de formation juridique Legal Care PME', 148.5,113,{align:'center'});
-      doc.text('comprenant : Droit des affaires · Fiscalité · Droit du travail · Contrats · Création d\'entreprise', 148.5,121,{align:'center'});
+      doc.setDrawColor(220,220,220); doc.line(20,98,190,98);
 
-      doc.setDrawColor(201,168,76); doc.setLineWidth(0.5);
-      doc.line(50,130,247,130);
+      let y = 110;
+      [['Référence',ref],['Plan activé',plan],['Méthode',method],['Entreprise',company],['Date',today],['Valide jusqu\'au',expiry],['Statut','✅ Confirmé']].forEach(([l,v]) => {
+        doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(130,130,130);
+        doc.text(l, 30,y);
+        doc.setTextColor(10,22,40); doc.setFont('helvetica','bold');
+        doc.text(String(v), 190,y,{align:'right'});
+        doc.setDrawColor(240,240,240); doc.line(20,y+4,190,y+4);
+        y += 13;
+      });
 
-      // Footer cert
-      doc.setTextColor(150,150,150); doc.setFontSize(9);
-      doc.text('Délivré le ' + today, 80,148,{align:'center'});
-      doc.text('Réf: CERT-LCP-' + Date.now().toString().slice(-6), 148.5,148,{align:'center'});
-      doc.text('Signature : Legal Care PME', 217,148,{align:'center'});
+      doc.setFillColor(10,22,40); doc.rect(0,278,210,19,'F');
+      doc.setTextColor(201,168,76); doc.setFontSize(7);
+      doc.text('Legal Care PME · legal-care-pme.netlify.app', 105,286,{align:'center'});
+      doc.setTextColor(255,255,255);
+      doc.text('Ce reçu est généré automatiquement et fait foi de votre paiement.', 105,292,{align:'center'});
 
-      doc.setTextColor(201,168,76); doc.setFontSize(8);
-      doc.text('Ce certificat atteste de la formation juridique complétée. Il ne constitue pas un avis juridique professionnel.', 148.5,165,{align:'center'});
-
-      doc.save(`Certificat_Legal_Care_PME_${company.replace(/ /g,'_')}.pdf`);
-      showToast('🏆 Certificat téléchargé avec succès !', 'success');
+      doc.save(`Recu_${ref}.pdf`);
+      showToast('✅ Reçu PDF téléchargé !', 'success');
     };
     document.head.appendChild(s);
   }
 
-  document.getElementById('formationModal').addEventListener('click', function(e) {
-    if(e.target === this) closeFormationModal();
+  document.getElementById('paymentModal').addEventListener('click', function(e) {
+    if(e.target === this) closePaymentModal();
   });
 
   const observer = new IntersectionObserver((entries) => {
